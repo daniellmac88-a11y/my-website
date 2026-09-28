@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "main": {
+      "type": "petphobia-product-modern",
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}
