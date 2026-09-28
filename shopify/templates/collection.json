@@ -1,0 +1,6 @@
+{
+  "sections": {
+    "main": { "type": "pp-collection", "settings": {} }
+  },
+  "order": ["main"]
+}

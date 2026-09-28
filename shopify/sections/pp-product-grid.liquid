@@ -1,0 +1,61 @@
+{% render 'pp-base' %}
+{%- liquid
+  assign source = section.settings.collection
+  if source == blank
+    assign source = collections['all']
+  endif
+-%}
+<section class="pp pp-pgrid" style="padding: {{ section.settings.pad_top }}px 0 {{ section.settings.pad_bottom }}px;">
+  <div class="pp__wrap">
+    {%- if section.settings.heading != blank -%}
+      <div class="pp-pgrid__head">
+        {%- if section.settings.eyebrow != blank -%}<p class="pp-pgrid__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h2 class="pp-pgrid__title">{{ section.settings.heading }}</h2>
+      </div>
+    {%- endif -%}
+
+    <div class="pp-grid">
+      {%- for product in source.products limit: section.settings.limit -%}
+        {% render 'pp-card', card_product: product %}
+      {%- else -%}
+        <p>No products yet.</p>
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.button_label != blank -%}
+      <div class="pp-pgrid__more">
+        <a class="pp-pgrid__btn" href="{{ source.url | default: routes.all_products_collection_url }}">{{ section.settings.button_label }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  .pp-pgrid__head { text-align: center; margin-bottom: 40px; }
+  .pp-pgrid__eyebrow { margin: 0 0 8px; font-size: 14px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--pp-muted); }
+  .pp-pgrid__title { margin: 0; font-size: clamp(28px, 3.6vw, 44px); font-weight: 700; letter-spacing: -.01em; }
+  .pp-pgrid__more { text-align: center; margin-top: 48px; }
+  .pp-pgrid__btn {
+    display: inline-block; padding: 16px 40px; border-radius: 99px; background: var(--pp-ink); color: #fff;
+    font-weight: 700; letter-spacing: .06em; text-transform: uppercase; text-decoration: none; transition: transform .2s;
+  }
+  .pp-pgrid__btn:hover { transform: translateY(-2px); }
+</style>
+
+{% schema %}
+{
+  "name": "Product grid (Petphobia)",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Small label", "default": "Shop the range" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Our Products" },
+    { "type": "collection", "id": "collection", "label": "Collection (leave empty for all products)" },
+    { "type": "range", "id": "limit", "label": "Products to show", "min": 2, "max": 24, "step": 1, "default": 8 },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "View all" },
+    { "type": "range", "id": "pad_top", "label": "Top spacing", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 64 },
+    { "type": "range", "id": "pad_bottom", "label": "Bottom spacing", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 64 }
+  ],
+  "presets": [{ "name": "Product grid (Petphobia)" }]
+}
+{% endschema %}
