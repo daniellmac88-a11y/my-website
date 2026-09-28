@@ -1,0 +1,84 @@
+{
+  "sections": {
+    "hero": {
+      "type": "pp-banner",
+      "settings": {
+        "style": "green",
+        "image_url": "https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-petphobia-golden-dog-hero.png?v=1790537214",
+        "image_alt": "Golden retriever",
+        "eyebrow": "PetJoy",
+        "heading": "Everything\nYour Pets Love",
+        "text": "Best Products for Your Pet",
+        "button_label": "Explore Products",
+        "button_link": "/collections/all",
+        "bg": "#E6F6E1",
+        "accent": "#0B4A17",
+        "button_bg": "#F26A1B"
+      }
+    },
+    "product_grid": {
+      "type": "pp-product-grid",
+      "settings": {
+        "eyebrow": "Shop the range",
+        "heading": "Our Products",
+        "limit": 8,
+        "button_label": "View all",
+        "pad_top": 64,
+        "pad_bottom": 64
+      }
+    },
+    "grooming_banner": {
+      "type": "pp-banner",
+      "settings": {
+        "style": "blob",
+        "image_url": "https://cdn.shopify.com/s/files/1/0808/0539/6702/files/about2.webp?v=1790303790",
+        "image_alt": "Happy pet",
+        "eyebrow": "Gentle care, made easy",
+        "heading": "Grooming Made Gentle",
+        "text": "Whisper-quiet tools with soft, rounded tips. Salon-style grooming at home for cats and dogs.",
+        "button_label": "Shop now",
+        "button_link": "/collections/grooming-care",
+        "bg": "#FDF3E3",
+        "accent": "#F28C18",
+        "button_bg": "#111111"
+      }
+    },
+    "trust_banner": {
+      "type": "fudge-uGQNx-trust-banner",
+      "settings": {}
+    },
+    "routine_feature": {
+      "type": "fudge-uGQNx-routine-feature",
+      "settings": {}
+    },
+    "categories": {
+      "type": "fudge-uGQNx-categories",
+      "settings": {}
+    },
+    "explore_banner": {
+      "type": "pp-banner",
+      "settings": {
+        "style": "full",
+        "image_url": "https://cdn.shopify.com/s/files/1/0808/0539/6702/files/about1.webp?v=1790303790",
+        "image_alt": "Pet and owner",
+        "eyebrow": "New arrivals every week",
+        "heading": "Everything Your Pet Needs",
+        "text": "Grooming, play, cozy rest and everyday care, all picked to make life happier for pets and their people.",
+        "button_label": "Explore More",
+        "button_link": "/collections/all",
+        "bg": "#F5D7BB",
+        "accent": "#111111",
+        "button_bg": "#6AA121"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "product_grid",
+    "grooming_banner",
+    "trust_banner",
+    "routine_feature",
+    "categories",
+    "explore_banner"
+  ]
+}

@@ -1,0 +1,155 @@
+{% comment %}
+  PetJoy Product Card Snippet
+  Matches the exact editorial card from store-improvement.replosites.com
+{% endcomment %}
+
+{%- liquid
+  assign card_tag = ""
+  assign card_desc = ""
+  assign card_spec = ""
+
+  case product.handle
+    when 'automatic-cat-toy-interactive-smart-led-laser'
+      assign card_tag = 'For indoor cats'
+      assign card_desc = 'Automatic or handheld laser play to encourage active chasing.'
+      assign card_spec = 'independent play sessions'
+    when 'dog-umbrella'
+      assign card_tag = 'For small dogs & cats'
+      assign card_desc = 'A clear rain cover with an adjustable handle and built-in leash.'
+      assign card_spec = 'rainy-day walks'
+    when 'dog-drinking-water-bowl-with-floating-design-non-wetting-non-skid-large-capacity'
+      assign card_tag = 'Dogs & cats'
+      assign card_desc = 'A floating plate and non-skid base designed for cleaner drinking.'
+      assign card_spec = 'tidier water stations'
+    when 'cat-tree-for-large-cats-cat-tower-for-indoor'
+      assign card_tag = 'Indoor cats up to 10 kg'
+      assign card_desc = 'Two roomy condos, a top perch, and scratching posts in one tower.'
+      assign card_spec = 'climbing, scratching & napping'
+    when 'luxury-plush-shark-pet-bed'
+      assign card_tag = 'Dogs & cats'
+      assign card_desc = 'Enclosed plush dome providing warmth, security, and comfortable rest.'
+      assign card_spec = 'cozy sleep & anxiety relief'
+    when 'automatic-retractable-dog-leash-dual-size-options-with-brake-lock-safety-system'
+      assign card_tag = 'Dogs of all sizes'
+      assign card_desc = 'Tangle-free smooth retraction with one-touch lock and ergonomic grip.'
+      assign card_spec = 'safe daily walking'
+    when 'dog-paw-cleaner'
+      assign card_tag = 'Dogs & puppies'
+      assign card_desc = 'Gentle silicone bristles remove mud and dirt before entering the home.'
+      assign card_spec = 'mess-free post-walk cleanup'
+    when 'cat-litter-trapping-mat'
+      assign card_tag = 'Indoor cats'
+      assign card_desc = 'Double-layer honeycomb design traps loose litter for quick emptying.'
+      assign card_spec = 'clean floor protection'
+    when 'electric-cat-steam-brush-3-in-1-pet-grooming-comb-with-water-spray-for-cats-and-dogs-usb-rechargeable'
+      assign card_tag = 'Dogs & cats'
+      assign card_desc = 'Hydrating mist relaxes pets while deshedding loose undercoat fur.'
+      assign card_spec = 'gentle deshedding & coat shine'
+    when '4-in-1-electric-pet-grooming-kit-hair-trimmer-clippers-nail-grinder-for-cats-dogs'
+      assign card_tag = 'Dogs & cats'
+      assign card_desc = 'Low-noise grooming clippers with precision trimmer and nail grinder.'
+      assign card_spec = 'calm at-home grooming'
+    else
+      if product.tags contains 'Dogs' or product.tags contains 'dogs'
+        assign card_tag = 'For dogs'
+      elsif product.tags contains 'Cats' or product.tags contains 'cats'
+        assign card_tag = 'For cats'
+      else
+        assign card_tag = 'Pet essential'
+      endif
+      assign card_desc = product.description | strip_html | truncatewords: 12
+      assign card_spec = 'daily care & comfort'
+  endcase
+
+  assign fallback_img = ""
+  case product.handle
+    when 'luxury-plush-shark-pet-bed'
+      assign fallback_img = 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-plush-shark-pet-bed.png?v=1790540584'
+    when 'automatic-retractable-dog-leash-dual-size-options-with-brake-lock-safety-system'
+      assign fallback_img = 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-retractable-dog-leash.png?v=1790540584'
+    when 'dog-paw-cleaner'
+      assign fallback_img = 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-dog-paw-cleaner.png?v=1790540584'
+    when 'cat-litter-trapping-mat'
+      assign fallback_img = 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-cat-litter-trapping-mat.png?v=1790540584'
+  endcase
+-%}
+
+<div class="fudge-prod-card">
+  <div class="fudge-prod-card__image-container">
+    {%- if card_tag != blank -%}
+      <div class="fudge-prod-card__pill-tag">{{ card_tag }}</div>
+    {%- endif -%}
+
+    <a href="{{ product.url }}" class="fudge-prod-card__image-link">
+      <div class="fudge-prod-card__image-box">
+        {%- if product.featured_media != blank -%}
+          {{ product.featured_media | image_url: width: 800 | image_tag:
+            loading: 'lazy',
+            sizes: '(min-width: 900px) 25vw, (min-width: 600px) 33vw, 50vw',
+            class: 'fudge-prod-card__image',
+            alt: product.title | escape
+          }}
+        {%- elsif fallback_img != blank -%}
+          <img 
+            src="{{ fallback_img }}" 
+            alt="{{ product.title | escape }}" 
+            class="fudge-prod-card__image" 
+            loading="lazy" 
+          />
+        {%- else -%}
+          <div class="fudge-prod-card__placeholder">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="#ccc">
+              <path d="M12 13c-2.2 0-4 1.8-4 4 0 1.5 1.5 3 4 3s4-1.5 4-3c0-2.2-1.8-4-4-4zm-4.5-4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm9 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6.5-3c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm4 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+            </svg>
+          </div>
+        {%- endif -%}
+      </div>
+    </a>
+  </div>
+
+  <div class="fudge-prod-card__body">
+    <div class="fudge-prod-card__pretag">A better everyday ritual</div>
+
+    <a href="{{ product.url }}" class="fudge-prod-card__title-link">
+      <h3 class="fudge-prod-card__title">{{ product.title }}</h3>
+    </a>
+
+    {%- if card_desc != blank -%}
+      <p class="fudge-prod-card__desc">{{ card_desc }}</p>
+    {%- endif -%}
+
+    {%- if card_spec != blank -%}
+      <p class="fudge-prod-card__spec">Best for: <span>{{ card_spec }}</span></p>
+    {%- endif -%}
+
+    <div class="fudge-prod-card__footer">
+      <div class="fudge-prod-card__price">
+        {{ product.price | money }}
+        {%- if product.compare_at_price > product.price -%}
+          <span class="fudge-prod-card__compare-price">{{ product.compare_at_price | money }}</span>
+        {%- endif -%}
+      </div>
+
+      <div class="fudge-prod-card__action">
+        {%- if product.available -%}
+          {%- if product.has_only_default_variant -%}
+            <form method="post" action="/cart/add" class="fudge-prod-card__form">
+              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+              <button type="submit" class="fudge-card-btn">
+                Add to cart
+              </button>
+            </form>
+          {%- else -%}
+            <a href="{{ product.url }}" class="fudge-card-btn">
+              Add to cart
+            </a>
+          {%- endif -%}
+        {%- else -%}
+          <button type="button" class="fudge-card-btn fudge-card-btn--disabled" disabled>
+            Sold out
+          </button>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,161 @@
+{% comment %}
+  PetJoy Editorial Footer
+  Matches store-improvement.replosites.com exactly
+{% endcomment %}
+
+<footer class="fudge-site-footer">
+  <div class="fudge-site-footer__container">
+    <div class="fudge-site-footer__grid">
+      <!-- Col 1: Brand -->
+      <div class="fudge-site-footer__col fudge-site-footer__col--brand">
+        <a href="/" class="fudge-site-footer__logo">PetJoy</a>
+        <p class="fudge-site-footer__bio">Everyday tools for happier, more comfortable pets.</p>
+      </div>
+
+      <!-- Col 2: Explore -->
+      <div class="fudge-site-footer__col">
+        <h4 class="fudge-site-footer__heading">EXPLORE</h4>
+        <ul class="fudge-site-footer__links">
+          <li><a href="/collections/dogs">Dogs Collection</a></li>
+          <li><a href="/collections/cats">Cats Collection</a></li>
+          <li><a href="/collections/grooming-care">Grooming &amp; Care</a></li>
+          <li><a href="/collections/all">All Pet Essentials</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Customer Care -->
+      <div class="fudge-site-footer__col">
+        <h4 class="fudge-site-footer__heading">HELP &amp; POLICIES</h4>
+        <ul class="fudge-site-footer__links">
+          <li><a href="/pages/track-order">Track Your Order</a></li>
+          <li><a href="/pages/shipping-policy">Shipping Policy</a></li>
+          <li><a href="/pages/return-policy">30-Day Returns</a></li>
+          <li><a href="/pages/faqs">FAQs</a></li>
+          <li><a href="/pages/contact">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="fudge-site-footer__bottom">
+      <p class="fudge-site-footer__copyright">&copy; {{ 'now' | date: '%Y' }}, PetJoy. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .fudge-site-footer {
+    background-color: #191005;
+    color: #fefbf6;
+    padding: 64px 20px 32px 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media screen and (min-width: 768px) {
+    .fudge-site-footer {
+      padding: 80px 40px 40px 40px;
+    }
+  }
+
+  .fudge-site-footer__container {
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  .fudge-site-footer__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    margin-bottom: 56px;
+  }
+
+  @media screen and (min-width: 768px) {
+    .fudge-site-footer__grid {
+      grid-template-columns: 1.4fr 1fr 1fr;
+      gap: 48px;
+    }
+  }
+
+  .fudge-site-footer__logo {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: #fefbf6;
+    text-decoration: none;
+    display: inline-block;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .fudge-site-footer__bio {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: rgba(254, 251, 246, 0.7);
+    margin: 0;
+    max-width: 340px;
+  }
+
+  .fudge-site-footer__heading {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(254, 251, 246, 0.6);
+    margin: 0 0 16px 0;
+  }
+
+  .fudge-site-footer__links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .fudge-site-footer__links a {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: #fefbf6;
+    text-decoration: none;
+    transition: opacity 0.15s ease;
+  }
+
+  .fudge-site-footer__links a:hover {
+    opacity: 0.75;
+  }
+
+  .fudge-site-footer__text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(254, 251, 246, 0.7);
+    margin: 0;
+  }
+
+  .fudge-site-footer__bottom {
+    padding-top: 32px;
+    border-top: 1px solid rgba(254, 251, 246, 0.12);
+  }
+
+  .fudge-site-footer__copyright {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: rgba(254, 251, 246, 0.5);
+    margin: 0;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "PetJoy Footer",
+  "settings": [],
+  "presets": [
+    {
+      "name": "PetJoy Footer"
+    }
+  ]
+}
+{% endschema %}

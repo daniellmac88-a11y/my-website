@@ -1,0 +1,190 @@
+{% render 'pp-base' %}
+{%- liquid
+  assign s = section.settings
+  assign btn_link = s.button_link | default: routes.all_products_collection_url
+  assign img_alt = s.image_alt | default: s.heading | escape
+-%}
+{%- capture banner_image -%}
+  {%- if s.image != blank -%}
+    {{ s.image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '500, 800, 1100, 1600', sizes: '(min-width: 990px) 50vw, 100vw', alt: img_alt, class: 'pp-ban__img' }}
+  {%- elsif s.image_url != blank -%}
+    <img class="pp-ban__img" src="{{ s.image_url }}" alt="{{ img_alt }}" loading="lazy">
+  {%- else -%}
+    {{ 'lifestyle-1' | placeholder_svg_tag: 'pp-ban__img' }}
+  {%- endif -%}
+{%- endcapture -%}
+{%- capture arrow -%}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>{%- endcapture -%}
+
+<section class="pp pp-ban pp-ban--{{ s.style }}" id="pp-ban-{{ section.id }}" style="--ban-bg: {{ s.bg }}; --ban-accent: {{ s.accent }}; --ban-btn: {{ s.button_bg }};">
+
+  {%- case s.style -%}
+
+    {%- when 'green' -%}
+      <div class="pp__wrap">
+        <div class="pp-ban__card">
+          <div class="pp-ban__copy">
+            {%- if s.eyebrow != blank -%}<p class="pp-ban__eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
+            <h2 class="pp-ban__title">{{ s.heading | newline_to_br }}</h2>
+            <div class="pp-ban__panel">
+              {%- if s.text != blank -%}<p class="pp-ban__panel-text">{{ s.text }}</p>{%- endif -%}
+              {%- if s.button_label != blank -%}
+                <a class="pp-ban__pill" href="{{ btn_link }}">
+                  <span>{{ s.button_label }}</span>
+                  <span class="pp-ban__pill-icon">{{ arrow }}</span>
+                </a>
+              {%- endif -%}
+            </div>
+          </div>
+          <div class="pp-ban__media">{{ banner_image }}</div>
+        </div>
+      </div>
+
+    {%- when 'blob' -%}
+      <div class="pp-ban__pattern" aria-hidden="true"></div>
+      <div class="pp__wrap pp-ban__grid">
+        <div class="pp-ban__blob">
+          <span class="pp-ban__blob-ring" aria-hidden="true"></span>
+          <div class="pp-ban__blob-fill">{{ banner_image }}</div>
+        </div>
+        <div class="pp-ban__copy">
+          {%- if s.eyebrow != blank -%}<p class="pp-ban__eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
+          <h2 class="pp-ban__title">{{ s.heading | newline_to_br }}</h2>
+          <svg class="pp-ban__zigzag" width="140" height="20" viewBox="0 0 140 20" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M3 16 L15 5 L27 16 L39 5 L51 16 L63 5 L75 16 L87 5 L99 16 L111 5 L123 16 L135 5"/></svg>
+          {%- if s.text != blank -%}<p class="pp-ban__text">{{ s.text }}</p>{%- endif -%}
+          {%- if s.button_label != blank -%}<a class="pp-ban__btn" href="{{ btn_link }}">{{ s.button_label }}</a>{%- endif -%}
+        </div>
+      </div>
+
+    {%- else -%}
+      <div class="pp-ban__grid">
+        <div class="pp-ban__media">{{ banner_image }}</div>
+        <div class="pp-ban__copy">
+          {%- if s.eyebrow != blank -%}<p class="pp-ban__eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
+          <h2 class="pp-ban__title">{{ s.heading | newline_to_br }}</h2>
+          {%- if s.text != blank -%}<p class="pp-ban__text">{{ s.text }}</p>{%- endif -%}
+          {%- if s.button_label != blank -%}<a class="pp-ban__btn" href="{{ btn_link }}">{{ s.button_label }}</a>{%- endif -%}
+        </div>
+      </div>
+  {%- endcase -%}
+</section>
+
+<style>
+  .pp-ban { position: relative; overflow: hidden; }
+  .pp-ban__img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .pp-ban__title { margin: 0; font-weight: 700; line-height: 1.05; letter-spacing: -.02em; }
+  .pp-ban__eyebrow { margin: 0 0 14px; font-weight: 600; }
+  .pp-ban__text { margin: 0; font-size: 17px; line-height: 1.7; }
+  .pp-ban__btn {
+    display: inline-flex; align-items: center; justify-content: center; min-height: 54px; padding: 0 44px;
+    border-radius: 99px; background: var(--ban-btn); color: #fff; font-weight: 700; font-size: 16px;
+    letter-spacing: .06em; text-transform: uppercase; text-decoration: none; transition: transform .2s, filter .2s;
+  }
+  .pp-ban__btn:hover { transform: translateY(-2px); filter: brightness(1.08); }
+
+  /* ---- Green (two-tone card) ---- */
+  .pp-ban--green { padding: 24px 0; }
+  .pp-ban--green .pp-ban__card {
+    display: grid; overflow: hidden; border-radius: 32px; background: var(--ban-bg);
+  }
+  @media (min-width: 990px) { .pp-ban--green .pp-ban__card { grid-template-columns: 1.05fr 1fr; min-height: 560px; } }
+  .pp-ban--green .pp-ban__copy { display: flex; flex-direction: column; justify-content: space-between; gap: 32px; padding: 48px 28px 0; }
+  @media (min-width: 990px) { .pp-ban--green .pp-ban__copy { padding: 64px 0 56px 64px; } }
+  .pp-ban--green .pp-ban__eyebrow { color: var(--ban-accent); letter-spacing: .14em; text-transform: uppercase; font-size: 14px; }
+  .pp-ban--green .pp-ban__title { color: var(--ban-accent); font-size: clamp(44px, 6.4vw, 92px); font-weight: 600; }
+  .pp-ban--green .pp-ban__panel {
+    align-self: flex-start; padding: 32px; border-radius: 24px; background: var(--ban-accent); color: #fff;
+    display: flex; flex-direction: column; gap: 22px; max-width: 420px;
+  }
+  .pp-ban--green .pp-ban__panel-text { margin: 0; font-size: 26px; font-weight: 500; line-height: 1.2; }
+  .pp-ban__pill {
+    display: inline-flex; align-items: center; gap: 18px; align-self: flex-start; padding: 8px 8px 8px 28px;
+    border-radius: 99px; background: var(--ban-btn); color: #fff; font-weight: 600; font-size: 17px; text-decoration: none;
+    transition: transform .2s;
+  }
+  .pp-ban__pill:hover { transform: translateX(3px); }
+  .pp-ban__pill-icon { width: 46px; height: 46px; border-radius: 50%; background: #fff; color: var(--ban-btn); display: inline-flex; align-items: center; justify-content: center; }
+  .pp-ban--green .pp-ban__media { position: relative; min-height: 360px; }
+  .pp-ban--green .pp-ban__media .pp-ban__img { position: absolute; inset: 0; }
+  @media (max-width: 989px) {
+    .pp-ban--green .pp-ban__card { text-align: center; }
+    .pp-ban--green .pp-ban__panel { align-self: stretch; max-width: none; align-items: center; margin: 0 -28px; border-radius: 0; order: 3; }
+    .pp-ban--green .pp-ban__pill { align-self: center; }
+    .pp-ban--green .pp-ban__copy { padding-bottom: 0; }
+    .pp-ban--green .pp-ban__card { display: flex; flex-direction: column; }
+    .pp-ban--green .pp-ban__copy { display: contents; }
+    .pp-ban--green .pp-ban__eyebrow { padding: 40px 24px 0; margin: 0; }
+    .pp-ban--green .pp-ban__title { padding: 12px 24px 24px; }
+    .pp-ban--green .pp-ban__media { order: 2; min-height: 320px; }
+    .pp-ban--green .pp-ban__panel { margin: 0; }
+  }
+
+  /* ---- Blob (cream with paw pattern) ---- */
+  .pp-ban--blob { background: var(--ban-bg); padding: 56px 0; }
+  .pp-ban__pattern {
+    position: absolute; inset: 0; opacity: .07; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120' fill='none' stroke='%23000' stroke-width='2.5'%3E%3Cg transform='translate(18 18)'%3E%3Cellipse cx='14' cy='20' rx='9' ry='7'/%3E%3Ccircle cx='4' cy='8' r='3.5'/%3E%3Ccircle cx='11' cy='3' r='3.5'/%3E%3Ccircle cx='18' cy='3' r='3.5'/%3E%3Ccircle cx='25' cy='8' r='3.5'/%3E%3C/g%3E%3Cg transform='translate(66 72) rotate(-30)'%3E%3Cpath d='M4 8a5 5 0 1 1 6-6l14 14a5 5 0 1 1-6 6z'/%3E%3C/g%3E%3C/svg%3E");
+  }
+  .pp-ban--blob .pp-ban__grid { position: relative; display: grid; gap: 40px; align-items: center; }
+  @media (min-width: 990px) { .pp-ban--blob .pp-ban__grid { grid-template-columns: 1fr 1fr; gap: 64px; } }
+  .pp-ban__blob { position: relative; width: min(100%, 560px); aspect-ratio: 1; margin: 0 auto; }
+  .pp-ban__blob-fill {
+    position: absolute; inset: 6%; overflow: hidden; background: color-mix(in srgb, var(--ban-accent) 35%, #fff);
+    border-radius: 58% 42% 55% 45% / 48% 58% 42% 52%;
+  }
+  .pp-ban__blob-ring {
+    position: absolute; inset: 0; border: 3px solid #5a4632; border-radius: 45% 55% 42% 58% / 55% 45% 55% 45%;
+    transform: rotate(-8deg);
+  }
+  .pp-ban--blob .pp-ban__copy { text-align: right; }
+  @media (max-width: 989px) { .pp-ban--blob .pp-ban__copy { text-align: center; } }
+  .pp-ban--blob .pp-ban__eyebrow { color: var(--ban-accent); font-size: clamp(20px, 2.2vw, 30px); }
+  .pp-ban--blob .pp-ban__title { font-size: clamp(38px, 4.6vw, 68px); }
+  .pp-ban__zigzag { display: block; margin: 22px 0 22px auto; color: var(--ban-accent); }
+  @media (max-width: 989px) { .pp-ban__zigzag { margin: 18px auto; } }
+  .pp-ban--blob .pp-ban__text { margin: 0 0 0 auto; max-width: 520px; color: #333; }
+  @media (max-width: 989px) { .pp-ban--blob .pp-ban__text { margin: 0 auto; } }
+  .pp-ban--blob .pp-ban__btn { margin-top: 36px; }
+
+  /* ---- Full (peach, image left) ---- */
+  .pp-ban--full { background: var(--ban-bg); }
+  .pp-ban--full .pp-ban__grid { display: grid; align-items: center; }
+  @media (min-width: 990px) { .pp-ban--full .pp-ban__grid { grid-template-columns: 1.15fr 1fr; min-height: 580px; } }
+  .pp-ban--full .pp-ban__media { position: relative; height: 100%; min-height: 320px; }
+  .pp-ban--full .pp-ban__media .pp-ban__img { position: absolute; inset: 0; }
+  .pp-ban--full .pp-ban__copy { padding: 48px 24px 56px; }
+  @media (min-width: 990px) { .pp-ban--full .pp-ban__copy { padding: 64px 64px 64px 56px; } }
+  .pp-ban--full .pp-ban__eyebrow { font-size: clamp(20px, 2vw, 30px); font-weight: 700; color: var(--ban-accent); }
+  .pp-ban--full .pp-ban__title { font-size: clamp(42px, 5.4vw, 80px); margin-bottom: 24px; }
+  .pp-ban--full .pp-ban__text { max-width: 560px; font-size: 19px; color: #2b2b2b; }
+  .pp-ban--full .pp-ban__btn { margin-top: 40px; border-radius: 10px; text-transform: none; letter-spacing: 0; font-size: 18px; padding: 0 40px; }
+</style>
+
+{% schema %}
+{
+  "name": "Banner (PetJoy)",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select", "id": "style", "label": "Banner style", "default": "full",
+      "options": [
+        { "value": "green", "label": "Two-tone card" },
+        { "value": "blob", "label": "Cream with paw pattern" },
+        { "value": "full", "label": "Full width, image left" }
+      ]
+    },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "image_url", "label": "Image URL (used if no image is picked)" },
+    { "type": "text", "id": "image_alt", "label": "Image description (for accessibility)" },
+    { "type": "text", "id": "eyebrow", "label": "Small heading", "default": "New arrivals every week" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Everything Your Pet Needs" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Grooming, play, cozy rest and everyday care, all picked to make life happier for pets and their people." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Explore More" },
+    { "type": "url", "id": "button_link", "label": "Button link (empty = all products)" },
+    { "type": "color", "id": "bg", "label": "Background colour", "default": "#F5D7BB" },
+    { "type": "color", "id": "accent", "label": "Accent colour (small heading, panel)", "default": "#111111" },
+    { "type": "color", "id": "button_bg", "label": "Button colour", "default": "#6AA121" }
+  ],
+  "presets": [{ "name": "Banner (PetJoy)" }]
+}
+{% endschema %}

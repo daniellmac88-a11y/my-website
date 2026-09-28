@@ -1,0 +1,1322 @@
+{% comment %}
+  PetJoy Nordic Studio Minimal Product Section
+  Accepted Design Specification
+{% endcomment %}
+
+{{ 'component-loading-overlay.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign featured_img = product.featured_image
+  if featured_img == blank
+    assign featured_img = product.featured_media
+  endif
+
+  assign fallback_handle_img = ''
+  case product.handle
+    when 'luxury-plush-shark-pet-bed'
+      assign fallback_handle_img = 'https://static.fudge.cloud/generated_images/AqzjBiw1qIHvBc3qYL7x-.png'
+    when '4-in-1-electric-pet-grooming-kit-hair-trimmer-clippers-nail-grinder-for-cats-dogs'
+      assign fallback_handle_img = 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/homepage1.jpg?v=1790303791'
+    when 'electric-cat-steam-brush-3-in-1-pet-grooming-comb-with-water-spray-for-cats-and-dogs-usb-rechargeable'
+      assign fallback_handle_img = 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/homepage2.jpg?v=1790303791'
+    when 'automatic-retractable-dog-leash-dual-size-options-with-brake-lock-safety-system'
+      assign fallback_handle_img = 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-retractable-dog-leash.png?v=1790540584'
+    when 'dog-paw-cleaner'
+      assign fallback_handle_img = 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-dog-paw-cleaner.png?v=1790540584'
+    when 'cat-litter-trapping-mat'
+      assign fallback_handle_img = 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-cat-litter-trapping-mat.png?v=1790540584'
+    else
+      assign fallback_handle_img = 'https://static.fudge.cloud/generated_images/AqzjBiw1qIHvBc3qYL7x-.png'
+  endcase
+
+  if featured_img != blank
+    assign hero_main_img_url = featured_img | image_url: width: 1400
+    assign hero_main_img_alt = featured_img.alt | default: product.title | escape
+  else
+    assign hero_main_img_url = fallback_handle_img
+    assign hero_main_img_alt = product.title | escape
+  endif
+-%}
+
+<div class="nordic-pdp-wrapper" id="NordicProduct-{{ section.id }}" data-section-id="{{ section.id }}">
+  <div class="nordic-pdp-container">
+    
+    <!-- 1. HERO PRODUCT SECTION (57% / 43% SPLIT) -->
+    <div class="nordic-hero-grid">
+      
+      <!-- LEFT COLUMN: LIFESTYLE / PRODUCT GALLERY (~57%) -->
+      <div class="nordic-media-col">
+        <div class="nordic-main-media-wrap">
+          <img 
+            id="NordicMainImage-{{ section.id }}"
+            src="{{ hero_main_img_url }}" 
+            alt="{{ hero_main_img_alt }}"
+            class="nordic-main-image"
+            loading="eager"
+            width="700"
+            height="933"
+          >
+
+          {%- if product.compare_at_price > product.price -%}
+            <span class="nordic-sale-tag">Sale</span>
+          {%- endif -%}
+        </div>
+
+        {%- if product.media.size > 1 -%}
+          <div class="nordic-thumbnails-row">
+            {%- for media in product.media -%}
+              <button 
+                type="button" 
+                class="nordic-thumb-btn{% if forloop.first %} active{% endif %}"
+                data-image-url="{{ media | image_url: width: 1400 }}"
+                data-media-id="{{ media.id }}"
+                aria-label="View product image {{ forloop.index }}"
+              >
+                <img 
+                  src="{{ media | image_url: width: 160, height: 160, crop: 'center' }}" 
+                  alt="{{ media.alt | escape }}" 
+                  loading="lazy" 
+                  width="80" 
+                  height="80"
+                >
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- elsif product.handle == 'luxury-plush-shark-pet-bed' -%}
+          <div class="nordic-thumbnails-row">
+            <button 
+              type="button" 
+              class="nordic-thumb-btn active"
+              data-image-url="https://static.fudge.cloud/generated_images/AqzjBiw1qIHvBc3qYL7x-.png"
+              aria-label="View lifestyle bed photo"
+            >
+              <img 
+                src="https://static.fudge.cloud/generated_images/AqzjBiw1qIHvBc3qYL7x-.png" 
+                alt="Luxury Plush Bed styled in room" 
+                loading="lazy" 
+                width="80" 
+                height="80"
+              >
+            </button>
+            <button 
+              type="button" 
+              class="nordic-thumb-btn"
+              data-image-url="https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-plush-shark-pet-bed.png?v=1790540584"
+              aria-label="View shark bed detail photo"
+            >
+              <img 
+                src="https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-plush-shark-pet-bed.png?v=1790540584" 
+                alt="Luxury Plush Shark Pet Bed dome" 
+                loading="lazy" 
+                width="80" 
+                height="80"
+              >
+            </button>
+          </div>
+        {%- endif -%}
+      </div>
+
+      <!-- RIGHT COLUMN: BUY BLOCK (~43%) -->
+      <div class="nordic-buy-col">
+        <!-- Eyebrow Category -->
+        <span class="nordic-eyebrow">
+          {%- liquid
+            assign eyebrow_tag = product.type
+            if eyebrow_tag == blank
+              case product.handle
+                when 'automatic-cat-toy-interactive-smart-led-laser'
+                  assign eyebrow_tag = 'Cat Play & Enrichment'
+                when 'dog-umbrella'
+                  assign eyebrow_tag = 'All-Weather Dog Gear'
+                when 'dog-drinking-water-bowl-with-floating-design-non-wetting-non-skid-large-capacity'
+                  assign eyebrow_tag = 'Hydration & Feeding'
+                when 'cat-tree-for-large-cats-cat-tower-for-indoor'
+                  assign eyebrow_tag = 'Cat Furniture & Scratching'
+                when 'luxury-plush-shark-pet-bed'
+                  assign eyebrow_tag = 'Cozy Essentials'
+                when 'automatic-retractable-dog-leash-dual-size-options-with-brake-lock-safety-system'
+                  assign eyebrow_tag = 'Walk Essentials'
+                when 'dog-paw-cleaner'
+                  assign eyebrow_tag = 'Post-Walk Care & Hygiene'
+                when 'cat-litter-trapping-mat'
+                  assign eyebrow_tag = 'Litter Care & Clean Living'
+                when 'electric-cat-steam-brush-3-in-1-pet-grooming-comb-with-water-spray-for-cats-and-dogs-usb-rechargeable'
+                  assign eyebrow_tag = 'Steam Grooming & Deshedding'
+                when '4-in-1-electric-pet-grooming-kit-hair-trimmer-clippers-nail-grinder-for-cats-dogs'
+                  assign eyebrow_tag = 'Electric Grooming & Trimming'
+                else
+                  assign eyebrow_tag = 'Curated Pet Essential'
+              endcase
+            endif
+          -%}
+          {{ eyebrow_tag | upcase }}
+        </span>
+
+        <!-- Product Title -->
+        <h1 class="nordic-product-title">{{ product.title }}</h1>
+
+        <!-- Product Summary -->
+        <div class="nordic-summary">
+          {%- if product.description != blank -%}
+            <p>{{ product.description | strip_html | truncatewords: 28 }}</p>
+          {%- else -%}
+            <p>A cozy, supportive essential thoughtfully designed for deeper rest, gentle daily care, and everyday comfort.</p>
+          {%- endif -%}
+        </div>
+
+        <!-- Price -->
+        <div class="nordic-price-box" id="NordicPrice-{{ section.id }}">
+          <span class="nordic-price-current">{{ current_variant.price | money }}</span>
+          {%- if current_variant.compare_at_price > current_variant.price -%}
+            <span class="nordic-price-compare">{{ current_variant.compare_at_price | money }}</span>
+          {%- endif -%}
+        </div>
+
+        <hr class="nordic-hairline-divider">
+
+        <!-- Variant Pickers & Form -->
+        <product-form class="product-form" data-section-id="{{ section.id }}">
+          <div class="product-form__error-message-wrapper" role="alert" hidden>
+            <span class="product-form__error-message"></span>
+          </div>
+
+          {%- form 'product', product, id: 'nordic-product-form', class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+            <input type="hidden" name="id" value="{{ current_variant.id }}" class="nordic-variant-id-input">
+
+            {%- unless product.has_only_default_variant -%}
+              <div class="nordic-options-container">
+                {%- for option in product.options_with_values -%}
+                  {%- assign option_name_downcase = option.name | downcase -%}
+                  <div class="nordic-option-group" data-option-index="{{ forloop.index0 }}">
+                    <div class="nordic-option-header">
+                      <span class="nordic-option-label">{{ option.name | upcase }}</span>
+                      <span class="nordic-option-selected-val" id="NordicSelected-{{ forloop.index0 }}">{{ option.selected_value }}</span>
+                    </div>
+
+                    {%- if option_name_downcase contains 'color' or option_name_downcase contains 'colour' -%}
+                      <!-- Circular Color Swatches -->
+                      <div class="nordic-swatches-row">
+                        {%- for value in option.values -%}
+                          {%- assign val_downcase = value | downcase -%}
+                          {%- liquid
+                            assign swatch_bg = '#E5E2DC'
+                            if val_downcase contains 'white'
+                              assign swatch_bg = '#FFFFFF'
+                            elsif val_downcase contains 'black'
+                              assign swatch_bg = '#1F242D'
+                            elsif val_downcase contains 'sand' or val_downcase contains 'beige'
+                              assign swatch_bg = '#E2D9CB'
+                            elsif val_downcase contains 'grey' or val_downcase contains 'gray'
+                              assign swatch_bg = '#A3A6AA'
+                            elsif val_downcase contains 'olive' or val_downcase contains 'sage' or val_downcase contains 'green'
+                              assign swatch_bg = '#7E8B7A'
+                            elsif val_downcase contains 'blue' or val_downcase contains 'navy' or val_downcase contains 'slate'
+                              assign swatch_bg = '#2B394A'
+                            elsif val_downcase contains 'yellow' or val_downcase contains 'gold'
+                              assign swatch_bg = '#F5C05C'
+                            elsif val_downcase contains 'purple'
+                              assign swatch_bg = '#8A6CAE'
+                            elsif val_downcase contains 'avocado'
+                              assign swatch_bg = '#859851'
+                            elsif val_downcase contains 'banana'
+                              assign swatch_bg = '#F6D155'
+                            elsif val_downcase contains 'mango'
+                              assign swatch_bg = '#FF8243'
+                            elsif val_downcase contains 'whale'
+                              assign swatch_bg = '#54728C'
+                            elsif val_downcase contains 'paw'
+                              assign swatch_bg = '#D4A373'
+                            endif
+                          -%}
+                          <button 
+                            type="button" 
+                            class="nordic-swatch-circle{% if option.selected_value == value %} active{% endif %}"
+                            data-option-index="{{ forloop.parentloop.index0 }}"
+                            data-value="{{ value | escape }}"
+                            title="{{ value | escape }}"
+                            aria-label="{{ value | escape }}"
+                            style="--swatch-color: {{ swatch_bg }};"
+                          ></button>
+                        {%- endfor -%}
+                      </div>
+                    {%- else -%}
+                      <!-- Pill Capsules for Size / Other Options -->
+                      <div class="nordic-pills-row">
+                        {%- for value in option.values -%}
+                          <button 
+                            type="button" 
+                            class="nordic-pill-btn{% if option.selected_value == value %} active{% endif %}"
+                            data-option-index="{{ forloop.parentloop.index0 }}"
+                            data-value="{{ value | escape }}"
+                          >
+                            {{ value }}
+                          </button>
+                        {%- endfor -%}
+                      </div>
+                    {%- endif -%}
+                  </div>
+                {%- endfor -%}
+              </div>
+            {%- endunless -%}
+
+            <!-- Full-Width Add To Cart Button -->
+            <div class="nordic-atc-wrapper">
+              <button 
+                type="submit" 
+                name="add" 
+                class="nordic-atc-btn"
+                {% unless current_variant.available %}disabled{% endunless %}
+                id="NordicSubmitButton-{{ section.id }}"
+              >
+                <span class="nordic-atc-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                  </svg>
+                </span>
+                <span class="nordic-atc-text">
+                  {%- if current_variant.available -%}
+                    Add to Cart
+                  {%- else -%}
+                    Sold Out
+                  {%- endif -%}
+                </span>
+                <div class="loading__spinner hidden">
+                  <svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                    <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                  </svg>
+                </div>
+              </button>
+            </div>
+          {%- endform -%}
+        </product-form>
+
+        <!-- Product Accordions -->
+        <div class="nordic-accordions-group">
+          <details class="nordic-accordion" open>
+            <summary class="nordic-accordion-summary">
+              <span class="nordic-accordion-title">Specifications</span>
+              <span class="nordic-accordion-icon"></span>
+            </summary>
+            <div class="nordic-accordion-content">
+              <ul>
+                {%- case product.handle -%}
+                  {%- when '4-in-1-electric-pet-grooming-kit-hair-trimmer-clippers-nail-grinder-for-cats-dogs' -%}
+                    <li>4-in-1 interchangeable heads: hair clippers, detailing trimmer, and rotary nail grinder</li>
+                    <li>Whisper-quiet low-vibration motor (&lt; 60 dB) to keep sensitive pets calm</li>
+                    <li>Cordless USB rechargeable lithium battery with up to 2 hours runtime</li>
+                    <li>Skin-safe rounded ceramic and stainless steel blades prevent irritation</li>
+                  {%- when 'electric-cat-steam-brush-3-in-1-pet-grooming-comb-with-water-spray-for-cats-and-dogs-usb-rechargeable' -%}
+                    <li>Integrated ultrasonic nano mist reduces flying fur and eliminates static flyaways</li>
+                    <li>Soft, flexible silicone massage bristles gently lift loose undercoat fur</li>
+                    <li>One-touch USB rechargeable cordless operation</li>
+                    <li>Gentle and effective for both dogs and cats with any coat length</li>
+                  {%- when 'automatic-retractable-dog-leash-dual-size-options-with-brake-lock-safety-system' -%}
+                    <li>One-touch instant thumb brake and lock safety mechanism</li>
+                    <li>360° tangle-free swivel mouth prevents leash jamming and twisting</li>
+                    <li>High-tensile durable woven ribbon with reflective safety detailing</li>
+                    <li>Ergonomic non-slip comfort grip engineered for fatigue-free walks</li>
+                  {%- when 'dog-paw-cleaner' -%}
+                    <li>Gentle 100% food-grade silicone cleaning bristles remove dirt and mud</li>
+                    <li>Quick detachable cup design for effortless water rinsing and cleaning</li>
+                    <li>360° circular cleansing for clean paws and spotless household floors</li>
+                    <li>BPA-free and safe for sensitive paws of all dog breeds</li>
+                  {%- when 'cat-litter-trapping-mat' -%}
+                    <li>Double-layer honeycomb pocket design catches and locks scattered litter granules</li>
+                    <li>Waterproof, urine-repellent bottom layer protects hardwood and tile floors</li>
+                    <li>Easy open-edge pouch allows pouring trapped litter right back into the tray</li>
+                    <li>Soft, non-toxic EVA material is comfortable for delicate cat paws</li>
+                  {%- when 'dog-umbrella' -%}
+                    <li>Clear waterproof canopy provides 360° visibility of your pet during rainy walks</li>
+                    <li>Built-in 12.2" interior leash clip secures directly to your pet's collar or harness</li>
+                    <li>Ergonomic angled cane handle with flexible stainless steel shaft</li>
+                    <li>28.3" canopy diameter tailored for small to medium dogs and cats</li>
+                  {%- when 'automatic-cat-toy-interactive-smart-led-laser' -%}
+                    <li>Dual play options: hands-free automatic 360° random rotation or handheld mode</li>
+                    <li>Safe, pet-friendly low-power LED laser beam with variable speed patterns</li>
+                    <li>Built-in automatic safety timer shuts off to prevent pet overexertion</li>
+                    <li>Compact, tip-resistant weighted base powered by 4 AA batteries</li>
+                  {%- when 'dog-drinking-water-bowl-with-floating-design-non-wetting-non-skid-large-capacity' -%}
+                    <li>Floating disk mechanism dispenses water gradually to prevent wet snout and choking</li>
+                    <li>Dust-proof floating barrier prevents hair, dirt, and dust from falling into water</li>
+                    <li>Curved anti-spill border and non-skid rubber base prevent accidental sliding</li>
+                    <li>Generous 1.5L capacity ideal for cats, puppies, and active dogs</li>
+                  {%- when 'cat-tree-for-large-cats-cat-tower-for-indoor' -%}
+                    <li>Multi-tier vertical activity tower with plush sleeping condo and top viewing perch</li>
+                    <li>Natural durable sisal-wrapped scratching posts protect household furniture</li>
+                    <li>Reinforced heavy engineered base plate provides wobble-free stability for large cats</li>
+                    <li>Ultra-soft skin-friendly plush fabric lining throughout</li>
+                  {%- else -%}
+                    <li>Semi-enclosed dome structure creates secure nesting comfort and warmth</li>
+                    <li>High-density supportive PP cotton filling provides soothing joint relief</li>
+                    <li>Removable reversible inner cushion for simple machine washing</li>
+                    <li>Non-skid, moisture-resistant bottom fabric keeps bed securely positioned</li>
+                {%- endcase -%}
+              </ul>
+            </div>
+          </details>
+
+          <details class="nordic-accordion">
+            <summary class="nordic-accordion-summary">
+              <span class="nordic-accordion-title">Materials</span>
+              <span class="nordic-accordion-icon"></span>
+            </summary>
+            <div class="nordic-accordion-content">
+              {%- case product.handle -%}
+                {%- when '4-in-1-electric-pet-grooming-kit-hair-trimmer-clippers-nail-grinder-for-cats-dogs' -%}
+                  <p>Ceramic and stainless steel blade assembly, impact-resistant ABS casing, rechargeable lithium-ion battery cell.</p>
+                {%- when 'electric-cat-steam-brush-3-in-1-pet-grooming-comb-with-water-spray-for-cats-and-dogs-usb-rechargeable' -%}
+                  <p>BPA-free durable ABS body, food-grade soft silicone massage bristles, integrated ultrasonic atomizing mist disc.</p>
+                {%- when 'automatic-retractable-dog-leash-dual-size-options-with-brake-lock-safety-system' -%}
+                  <p>High-impact polypropylene casing, stainless steel internal recoil coil, reinforced woven nylon ribbon with alloy carabiner.</p>
+                {%- when 'dog-paw-cleaner' -%}
+                  <p>100% food-grade soft silicone bristle array, durable BPA-free polypropylene exterior tumbler.</p>
+                {%- when 'cat-litter-trapping-mat' -%}
+                  <p>Double-layer eco-friendly EVA foam, urine-proof waterproof lining, phthalate-free and non-toxic.</p>
+                {%- when 'dog-umbrella' -%}
+                  <p>Transparent TPU/PVC waterproof canopy, stainless steel ribs, zinc-alloy collar clip and ergonomic grip.</p>
+                {%- when 'automatic-cat-toy-interactive-smart-led-laser' -%}
+                  <p>High-durability ABS polymer housing, certified class-safe LED diode, weighted anti-tip base.</p>
+                {%- when 'dog-drinking-water-bowl-with-floating-design-non-wetting-non-skid-large-capacity' -%}
+                  <p>Food-grade ABS resin plate, PP water reservoir, non-toxic anti-skid silicone perimeter ring.</p>
+                {%- when 'cat-tree-for-large-cats-cat-tower-for-indoor' -%}
+                  <p>CARB-certified sturdy particle board base, 100% natural sisal rope columns, ultra-soft high-pile plush lining.</p>
+                {%- else -%}
+                  <p>Crafted from certified pet-safe components, high-density breathable fabrics, and sustainable supportive materials designed for maximum comfort and safety.</p>
+              {%- endcase -%}
+            </div>
+          </details>
+
+          <details class="nordic-accordion">
+            <summary class="nordic-accordion-summary">
+              <span class="nordic-accordion-title">Shipping & Returns</span>
+              <span class="nordic-accordion-icon"></span>
+            </summary>
+            <div class="nordic-accordion-content">
+              <p>Free tracked delivery on all orders over $50. Packaged with care in eco-friendly protective packaging. 30-day happiness guarantee with simple, hassle-free returns.</p>
+            </div>
+          </details>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 2. MATERIALS & CRAFT SECTION (50/50 SPLIT) -->
+    {%- liquid
+      assign craft_h2 = "Thoughtful materials for lasting comfort"
+      assign craft_desc = "Crafted with breathable, easy-care fabrics and a supportive fill, every PetJoy piece is made for everyday comfort — for pets and their people."
+      assign craft_badge1 = "SOFT FABRIC"
+      assign craft_badge2 = "SUPPORTIVE FILL"
+      assign craft_badge3 = "EASY CARE"
+      assign craft_image = "https://static.fudge.cloud/generated_images/7q2hOzpqsjsD8xNngH-52.png"
+
+      if product.handle contains 'grooming' or product.handle contains 'brush'
+        assign craft_h2 = "Quiet, gentle care for stress-free grooming"
+        assign craft_desc = "Engineered with whisper-quiet motors, rounded pet-safe blades, and ergonomic cordless handling to keep home grooming calm and soothing."
+        assign craft_badge1 = "LOW NOISE"
+        assign craft_badge2 = "SKIN SAFE"
+        assign craft_badge3 = "EASY CLEAN"
+        assign craft_image = "https://cdn.shopify.com/s/files/1/0808/0539/6702/files/homepage1.jpg?v=1790303791"
+      elsif product.handle contains 'leash' or product.handle contains 'umbrella' or product.handle contains 'cleaner' or product.handle contains 'bowl'
+        assign craft_h2 = "Built for smooth, reliable daily routines"
+        assign craft_desc = "Constructed with rugged weather-resistant polymers, smooth recoil mechanisms, and ergonomic grips tested to handle daily walks and active routines."
+        assign craft_badge1 = "ALL-WEATHER"
+        assign craft_badge2 = "ERGONOMIC"
+        assign craft_badge3 = "HEAVY DUTY"
+        assign craft_image = "https://cdn.shopify.com/s/files/1/0808/0539/6702/files/about2.webp?v=1790303790"
+      elsif product.handle contains 'toy' or product.handle contains 'mat' or product.handle contains 'tree' or product.handle contains 'tower'
+        assign craft_h2 = "Designed for active play and cleaner living"
+        assign craft_desc = "Thoughtfully built with non-toxic materials, claw-resistant textures, and mess-trapping designs to keep cats stimulated and living spaces clean."
+        assign craft_badge1 = "NON-TOXIC"
+        assign craft_badge2 = "CLAW-SAFE"
+        assign craft_badge3 = "EASY EMPTY"
+        assign craft_image = "https://cdn.shopify.com/s/files/1/0808/0539/6702/files/about2.webp?v=1790303790"
+      endif
+    -%}
+
+    <div class="nordic-craft-section">
+      <div class="nordic-craft-grid">
+        
+        <!-- Left: Copy & 3 Badge Icons -->
+        <div class="nordic-craft-info">
+          <h2 class="nordic-craft-heading">{{ craft_h2 }}</h2>
+          <p class="nordic-craft-body">{{ craft_desc }}</p>
+
+          <div class="nordic-badges-row">
+            <!-- Badge 1 -->
+            <div class="nordic-badge-item">
+              <div class="nordic-badge-circle">
+                {% render 'fudge-icon-v2', svg_id: 'sr_cotton-flower-bloom', size: '26', color: '#1F242D' %}
+              </div>
+              <span class="nordic-badge-caption">{{ craft_badge1 }}</span>
+            </div>
+
+            <!-- Badge 2 -->
+            <div class="nordic-badge-item">
+              <div class="nordic-badge-circle">
+                {% render 'fudge-icon-v2', svg_id: 'sr_layers-stacked', size: '26', color: '#1F242D' %}
+              </div>
+              <span class="nordic-badge-caption">{{ craft_badge2 }}</span>
+            </div>
+
+            <!-- Badge 3 -->
+            <div class="nordic-badge-item">
+              <div class="nordic-badge-circle">
+                {% render 'fudge-icon-v2', svg_id: 'sr_drop-shape', size: '26', color: '#1F242D' %}
+              </div>
+              <span class="nordic-badge-caption">{{ craft_badge3 }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Craft Photography -->
+        <div class="nordic-craft-media">
+          <img 
+            src="{{ craft_image }}" 
+            alt="{{ craft_h2 | escape }}"
+            class="nordic-craft-img"
+            loading="lazy"
+            width="600"
+            height="500"
+          >
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 3. CROSS-SELL CAROUSEL / RECOMMENDATIONS ("You might also like") -->
+    <div class="nordic-recs-section">
+      <div class="nordic-recs-header">
+        <h2 class="nordic-recs-title">You might also like</h2>
+      </div>
+
+      <div class="nordic-recs-grid">
+        {%- assign rec_count = 0 -%}
+        {%- for rec_product in collections['all'].products -%}
+          {%- if rec_product.id != product.id and rec_count < 4 -%}
+            {%- assign rec_count = rec_count | plus: 1 -%}
+            {%- liquid
+              assign rec_img = rec_product.featured_image
+              if rec_img == blank
+                assign rec_img = rec_product.featured_media
+              endif
+
+              assign rec_img_url = ''
+              if rec_img != blank
+                assign rec_img_url = rec_img | image_url: width: 600, height: 600, crop: 'center'
+              else
+                case rec_product.handle
+                  when 'luxury-plush-shark-pet-bed'
+                    assign rec_img_url = 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-plush-shark-pet-bed.png?v=1790540584'
+                  when '4-in-1-electric-pet-grooming-kit-hair-trimmer-clippers-nail-grinder-for-cats-dogs'
+                    assign rec_img_url = 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/homepage1.jpg?v=1790303791'
+                  when 'electric-cat-steam-brush-3-in-1-pet-grooming-comb-with-water-spray-for-cats-and-dogs-usb-rechargeable'
+                    assign rec_img_url = 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/homepage2.jpg?v=1790303791'
+                  when 'automatic-retractable-dog-leash-dual-size-options-with-brake-lock-safety-system'
+                    assign rec_img_url = 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-retractable-dog-leash.png?v=1790540584'
+                  when 'dog-paw-cleaner'
+                    assign rec_img_url = 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-dog-paw-cleaner.png?v=1790540584'
+                  when 'cat-litter-trapping-mat'
+                    assign rec_img_url = 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-cat-litter-trapping-mat.png?v=1790540584'
+                  else
+                    assign rec_img_url = 'https://static.fudge.cloud/generated_images/AqzjBiw1qIHvBc3qYL7x-.png'
+                endcase
+              endif
+            -%}
+            <a href="{{ rec_product.url }}" class="nordic-rec-card">
+              <div class="nordic-rec-img-wrap">
+                <img 
+                  src="{{ rec_img_url }}" 
+                  alt="{{ rec_product.title | escape }}"
+                  loading="lazy"
+                  width="300"
+                  height="300"
+                >
+              </div>
+              <div class="nordic-rec-info">
+                <span class="nordic-rec-name">{{ rec_product.title }}</span>
+                <span class="nordic-rec-price">{{ rec_product.price | money }}</span>
+                <div class="nordic-rec-dots">
+                  <span class="nordic-rec-dot" style="background-color: #E2D9CB;"></span>
+                  <span class="nordic-rec-dot" style="background-color: #7E8B7A;"></span>
+                  {%- if forloop.index == 2 -%}
+                    <span class="nordic-rec-dot" style="background-color: #2B394A;"></span>
+                  {%- endif -%}
+                </div>
+              </div>
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CLIENT JAVASCRIPT FOR SWATCHES, VARIANTS, & THUMBNAILS -->
+<script>
+  (function() {
+    const container = document.getElementById('NordicProduct-{{ section.id }}');
+    if (!container) return;
+
+    const variantsData = {{ product.variants | json }};
+    const mainImg = container.querySelector('#NordicMainImage-{{ section.id }}');
+    const priceCurrent = container.querySelector('#NordicPrice-{{ section.id }} .nordic-price-current');
+    const priceCompare = container.querySelector('#NordicPrice-{{ section.id }} .nordic-price-compare');
+    const variantIdInput = container.querySelector('.nordic-variant-id-input');
+    const atcBtn = container.querySelector('#NordicSubmitButton-{{ section.id }}');
+    const atcText = atcBtn ? atcBtn.querySelector('.nordic-atc-text') : null;
+
+    // Handle Swatch and Pill selections
+    const optionGroups = container.querySelectorAll('.nordic-option-group');
+
+    function getSelectedOptions() {
+      const selected = [];
+      optionGroups.forEach(group => {
+        const activeItem = group.querySelector('.nordic-swatch-circle.active, .nordic-pill-btn.active');
+        if (activeItem) {
+          selected.push(activeItem.dataset.value);
+        }
+      });
+      return selected;
+    }
+
+    function updateVariant() {
+      const selectedVals = getSelectedOptions();
+      const matchedVariant = variantsData.find(v => {
+        return selectedVals.every((val, idx) => v.options[idx] === val);
+      });
+
+      if (matchedVariant) {
+        if (variantIdInput) variantIdInput.value = matchedVariant.id;
+
+        // Price formatting
+        if (priceCurrent) {
+          const formatted = (matchedVariant.price / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+          priceCurrent.textContent = formatted;
+        }
+
+        if (priceCompare) {
+          if (matchedVariant.compare_at_price > matchedVariant.price) {
+            const formattedComp = (matchedVariant.compare_at_price / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+            priceCompare.textContent = formattedComp;
+            priceCompare.style.display = 'inline-block';
+          } else {
+            priceCompare.style.display = 'none';
+          }
+        }
+
+        // Availability and Button state
+        if (atcBtn && atcText) {
+          if (matchedVariant.available) {
+            atcBtn.removeAttribute('disabled');
+            atcText.textContent = 'Add to Cart';
+          } else {
+            atcBtn.setAttribute('disabled', 'disabled');
+            atcText.textContent = 'Sold Out';
+          }
+        }
+
+        // Main Image swap if variant has image
+        if (matchedVariant.featured_image && matchedVariant.featured_image.src && mainImg) {
+          mainImg.src = matchedVariant.featured_image.src;
+        }
+
+        // Update URL
+        const url = new URL(window.location);
+        url.searchParams.set('variant', matchedVariant.id);
+        window.history.replaceState({}, '', url);
+      }
+    }
+
+    // Attach click listeners to swatches and pills
+    optionGroups.forEach(group => {
+      const items = group.querySelectorAll('.nordic-swatch-circle, .nordic-pill-btn');
+      const labelVal = group.querySelector('.nordic-option-selected-val');
+
+      items.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          items.forEach(el => el.classList.remove('active'));
+          btn.classList.add('active');
+          if (labelVal) labelVal.textContent = btn.dataset.value;
+          updateVariant();
+        });
+      });
+    });
+
+    // Thumbnail clicks
+    const thumbBtns = container.querySelectorAll('.nordic-thumb-btn');
+    thumbBtns.forEach(thumb => {
+      thumb.addEventListener('click', function() {
+        thumbBtns.forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
+        if (mainImg && thumb.dataset.imageUrl) {
+          mainImg.src = thumb.dataset.imageUrl;
+        }
+      });
+    });
+
+  })();
+</script>
+
+{%- style -%}
+  /* NORDIC STUDIO MINIMAL PDP STYLES */
+  .nordic-pdp-wrapper {
+    background-color: #FAF8F5;
+    color: #1F242D;
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    padding: 32px 0 64px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .nordic-pdp-container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 40px;
+    box-sizing: border-box;
+  }
+
+  @media screen and (max-width: 768px) {
+    .nordic-pdp-container {
+      padding: 0 20px;
+    }
+  }
+
+  /* 1. HERO PRODUCT SECTION */
+  .nordic-hero-grid {
+    display: grid;
+    grid-template-columns: 56% 44%;
+    gap: 56px;
+    align-items: start;
+    margin-bottom: 72px;
+  }
+
+  @media screen and (max-width: 989px) {
+    .nordic-hero-grid {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+  }
+
+  /* LEFT: MEDIA */
+  .nordic-media-col {
+    position: relative;
+    width: 100%;
+  }
+
+  .nordic-main-media-wrap {
+    position: relative;
+    width: 100%;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: #F1EFEA;
+    aspect-ratio: 3 / 4;
+  }
+
+  .nordic-main-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.2s ease;
+  }
+
+  .nordic-sale-tag {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background-color: #1F242D;
+    color: #FAF8F5;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 3px;
+  }
+
+  .nordic-thumbnails-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .nordic-thumb-btn {
+    border: 1px solid transparent;
+    padding: 0;
+    margin: 0;
+    background: #F1EFEA;
+    border-radius: 4px;
+    cursor: pointer;
+    overflow: hidden;
+    width: 68px;
+    height: 68px;
+    flex-shrink: 0;
+    transition: border-color 0.15s ease;
+  }
+
+  .nordic-thumb-btn.active {
+    border-color: #1F242D;
+  }
+
+  .nordic-thumb-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* RIGHT: BUY BLOCK */
+  .nordic-buy-col {
+    padding-top: 8px;
+  }
+
+  .nordic-eyebrow {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: #6E737D;
+    margin-bottom: 8px;
+  }
+
+  .nordic-product-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 34px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #1F242D;
+    margin: 0 0 10px;
+    letter-spacing: -0.01em;
+  }
+
+  @media screen and (max-width: 768px) {
+    .nordic-product-title {
+      font-size: 26px;
+    }
+  }
+
+  .nordic-rating-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .nordic-stars {
+    display: flex;
+    align-items: center;
+  }
+
+  .nordic-review-count {
+    font-size: 13px;
+    color: #6E737D;
+    font-weight: 400;
+  }
+
+  .nordic-summary {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #555A64;
+    margin-bottom: 18px;
+  }
+
+  .nordic-summary p {
+    margin: 0;
+  }
+
+  .nordic-price-box {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .nordic-price-current {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: #1F242D;
+  }
+
+  .nordic-price-compare {
+    font-size: 16px;
+    color: #8C9098;
+    text-decoration: line-through;
+  }
+
+  .nordic-hairline-divider {
+    display: block !important;
+    height: 1px;
+    background-color: #E5E2DC;
+    border: none;
+    margin: 22px 0;
+    width: 100%;
+  }
+
+  /* OPTIONS & SWATCHES */
+  .nordic-options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  .nordic-option-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .nordic-option-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: #1F242D;
+  }
+
+  .nordic-option-selected-val {
+    font-size: 12px;
+    color: #6E737D;
+  }
+
+  /* COLOR SWATCHES */
+  .nordic-swatches-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .nordic-swatch-circle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: var(--swatch-color);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .nordic-swatch-circle:hover {
+    transform: scale(1.08);
+  }
+
+  .nordic-swatch-circle.active {
+    box-shadow: 0 0 0 2px #FAF8F5, 0 0 0 3.5px #1F242D;
+  }
+
+  /* SIZE PILLS */
+  .nordic-pills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .nordic-pill-btn {
+    min-width: 44px;
+    height: 38px;
+    padding: 0 16px;
+    border-radius: 4px;
+    border: 1px solid #D5D2CB;
+    background-color: transparent;
+    color: #1F242D;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+  }
+
+  .nordic-pill-btn:hover {
+    border-color: #1F242D;
+  }
+
+  .nordic-pill-btn.active {
+    border-color: #1F242D;
+    background-color: #1F242D;
+    color: #FFFFFF;
+  }
+
+  /* ATC BUTTON */
+  .nordic-atc-wrapper {
+    margin-bottom: 28px;
+  }
+
+  .nordic-atc-btn {
+    width: 100%;
+    min-height: 52px;
+    background-color: #242B35;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    box-shadow: 0 2px 6px rgba(36, 43, 53, 0.12);
+  }
+
+  .nordic-atc-btn:hover:not(:disabled) {
+    background-color: #161A20;
+  }
+
+  .nordic-atc-btn:active:not(:disabled) {
+    transform: scale(0.99);
+  }
+
+  .nordic-atc-btn:disabled {
+    background-color: #9C9EA3;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  .nordic-atc-icon {
+    display: flex;
+    align-items: center;
+  }
+
+  /* ACCORDIONS */
+  .nordic-accordions-group {
+    border-top: 1px solid #E5E2DC;
+  }
+
+  .nordic-accordion {
+    border-bottom: 1px solid #E5E2DC;
+  }
+
+  .nordic-accordion-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    cursor: pointer;
+    list-style: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1F242D;
+    user-select: none;
+  }
+
+  .nordic-accordion-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .nordic-accordion-icon {
+    position: relative;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+  }
+
+  .nordic-accordion-icon::before,
+  .nordic-accordion-icon::after {
+    content: '';
+    position: absolute;
+    background-color: #1F242D;
+    transition: transform 0.2s ease;
+  }
+
+  /* Horizontal bar */
+  .nordic-accordion-icon::before {
+    top: 6px;
+    left: 0;
+    width: 14px;
+    height: 1.5px;
+  }
+
+  /* Vertical bar */
+  .nordic-accordion-icon::after {
+    top: 0;
+    left: 6px;
+    width: 1.5px;
+    height: 14px;
+  }
+
+  .nordic-accordion[open] .nordic-accordion-icon::after {
+    transform: rotate(90deg);
+    opacity: 0;
+  }
+
+  .nordic-accordion-content {
+    padding-bottom: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #555A64;
+  }
+
+  .nordic-accordion-content ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  .nordic-accordion-content li {
+    margin-bottom: 6px;
+  }
+
+  .nordic-accordion-content p {
+    margin: 0;
+  }
+
+  /* 2. MATERIALS & CRAFT SECTION */
+  .nordic-craft-section {
+    background-color: #FAF8F5;
+    border-top: 1px solid #E5E2DC;
+    border-bottom: 1px solid #E5E2DC;
+    padding: 72px 0;
+    margin-bottom: 72px;
+  }
+
+  .nordic-craft-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  @media screen and (max-width: 899px) {
+    .nordic-craft-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+  }
+
+  .nordic-craft-info {
+    max-width: 520px;
+  }
+
+  .nordic-craft-heading {
+    font-family: 'Poppins', sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.25;
+    color: #1F242D;
+    margin: 0 0 16px;
+    letter-spacing: -0.01em;
+  }
+
+  @media screen and (max-width: 768px) {
+    .nordic-craft-heading {
+      font-size: 24px;
+    }
+  }
+
+  .nordic-craft-body {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #555A64;
+    margin: 0 0 36px;
+  }
+
+  .nordic-badges-row {
+    display: flex;
+    gap: 32px;
+  }
+
+  @media screen and (max-width: 480px) {
+    .nordic-badges-row {
+      gap: 18px;
+    }
+  }
+
+  .nordic-badge-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .nordic-badge-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 1px solid #D5D2CB;
+    background-color: #FAF8F5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .nordic-badge-item:hover .nordic-badge-circle {
+    border-color: #1F242D;
+    transform: translateY(-2px);
+  }
+
+  .nordic-badge-caption {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: #1F242D;
+    text-transform: uppercase;
+  }
+
+  .nordic-craft-media {
+    width: 100%;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: #F1EFEA;
+    aspect-ratio: 4 / 3;
+  }
+
+  .nordic-craft-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* 3. CROSS-SELL CAROUSEL / RECOMMENDATIONS */
+  .nordic-recs-section {
+    padding-bottom: 24px;
+  }
+
+  .nordic-recs-header {
+    margin-bottom: 28px;
+  }
+
+  .nordic-recs-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: #1F242D;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .nordic-recs-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  @media screen and (max-width: 989px) {
+    .nordic-recs-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+  }
+
+  @media screen and (max-width: 520px) {
+    .nordic-recs-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+
+  .nordic-rec-card {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    group: relative;
+    transition: transform 0.15s ease;
+  }
+
+  .nordic-rec-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .nordic-rec-img-wrap {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: #F1EFEA;
+    margin-bottom: 12px;
+  }
+
+  .nordic-rec-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .nordic-rec-card:hover .nordic-rec-img-wrap img {
+    transform: scale(1.03);
+  }
+
+  .nordic-rec-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .nordic-rec-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1F242D;
+    line-height: 1.35;
+  }
+
+  .nordic-rec-price {
+    font-size: 14px;
+    font-weight: 400;
+    color: #6E737D;
+  }
+
+  .nordic-rec-dots {
+    display: flex;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .nordic-rec-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    display: inline-block;
+  }
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "Nordic Minimal Product",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Craft Section"
+    },
+    {
+      "type": "text",
+      "id": "craft_heading",
+      "label": "Craft Heading",
+      "default": "Thoughtful materials for lasting comfort"
+    },
+    {
+      "type": "textarea",
+      "id": "craft_body",
+      "label": "Craft Description",
+      "default": "Crafted with breathable, easy-care fabrics and a supportive fill, every PetJoy piece is made for everyday comfort — for pets and their people."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Nordic Minimal Product"
+    }
+  ]
+}
+{% endschema %}

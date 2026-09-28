@@ -1,0 +1,402 @@
+{% comment %}
+  PetJoy The Everyday Edit Grid
+  Matches store-improvement.replosites.com exactly
+{% endcomment %}
+
+<section id="shop-products" class="fudge-bestsellers" style="background-color: {{ section.settings.bg_color | default: '#fefbf6' }};">
+  <div class="fudge-bestsellers__container">
+    <div class="fudge-bestsellers__header">
+      <div class="fudge-bestsellers__title-wrap">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="fudge-bestsellers__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        <h2 class="fudge-bestsellers__title">
+          {{ section.settings.title }}
+        </h2>
+        {%- if section.settings.subtitle != blank -%}
+          <p class="fudge-bestsellers__subtitle">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.view_all_label != blank -%}
+        <a href="{{ section.settings.view_all_link | default: '#care' }}" class="fudge-bestsellers__view-all">
+          {{ section.settings.view_all_label }} &rarr;
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="fudge-bestsellers__grid">
+      {%- liquid
+        assign selected_collection = section.settings.collection
+        assign product_count = 0
+        assign featured_handles = "automatic-cat-toy-interactive-smart-led-laser,dog-umbrella,dog-drinking-water-bowl-with-floating-design-non-wetting-non-skid-large-capacity,cat-tree-for-large-cats-cat-tower-for-indoor" | split: ","
+      -%}
+
+      {%- if selected_collection != blank and selected_collection.products_count > 0 -%}
+        {%- for product in selected_collection.products limit: section.settings.products_to_show -%}
+          {%- render 'fudge-uGQNx-product-card', product: product -%}
+          {%- assign product_count = product_count | plus: 1 -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for handle in featured_handles -%}
+          {%- assign product = all_products[handle] -%}
+          {%- if product != blank -%}
+            {%- render 'fudge-uGQNx-product-card', product: product -%}
+            {%- assign product_count = product_count | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  .fudge-bestsellers {
+    padding: 64px 20px;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #fefbf6;
+  }
+
+  @media screen and (min-width: 768px) {
+    .fudge-bestsellers {
+      padding: 96px 40px;
+    }
+  }
+
+  .fudge-bestsellers__container {
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  .fudge-bestsellers__header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  @media screen and (min-width: 768px) {
+    .fudge-bestsellers__header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 48px;
+    }
+  }
+
+  .fudge-bestsellers__eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #63594b;
+    margin: 0 0 8px 0;
+  }
+
+  .fudge-bestsellers__title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: #191005;
+    margin: 0;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  @media screen and (min-width: 768px) {
+    .fudge-bestsellers__title {
+      font-size: 44px;
+    }
+  }
+
+  .fudge-bestsellers__view-all {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #191005;
+    text-decoration: none;
+    transition: color 0.15s ease;
+    align-self: flex-start;
+  }
+
+  .fudge-bestsellers__view-all:hover {
+    color: #63594b;
+  }
+
+  .fudge-bestsellers__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  @media screen and (min-width: 640px) {
+    .fudge-bestsellers__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    .fudge-bestsellers__grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+  }
+
+  .fudge-prod-card {
+    background-color: #ffffff;
+    border-radius: 4px;
+    border: 1px solid #e5e5e5;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+    height: 100%;
+  }
+
+  .fudge-prod-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(25, 16, 5, 0.06);
+  }
+
+  .fudge-prod-card__image-container {
+    position: relative;
+    width: 100%;
+    background-color: #f7f5ef;
+    overflow: hidden;
+  }
+
+  .fudge-prod-card__pill-tag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 2;
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid #e5e5e5;
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #191005;
+    backdrop-filter: blur(4px);
+  }
+
+  .fudge-prod-card__image-link {
+    display: block;
+    text-decoration: none;
+  }
+
+  .fudge-prod-card__image-box {
+    position: relative;
+    width: 100%;
+    padding-bottom: 90%;
+    overflow: hidden;
+  }
+
+  .fudge-prod-card__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 16px;
+    box-sizing: border-box;
+    transition: transform 0.5s ease;
+  }
+
+  .fudge-prod-card:hover .fudge-prod-card__image {
+    transform: scale(1.06);
+  }
+
+  .fudge-prod-card__placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f7f5ef;
+  }
+
+  .fudge-prod-card__body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background-color: #ffffff;
+  }
+
+  .fudge-prod-card__pretag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #63594b;
+    margin-bottom: 6px;
+  }
+
+  .fudge-prod-card__title-link {
+    text-decoration: none;
+    color: inherit;
+    margin-bottom: 8px;
+  }
+
+  .fudge-prod-card__title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.25;
+    color: #191005;
+    margin: 0;
+    transition: color 0.15s ease;
+  }
+
+  .fudge-prod-card__title:hover {
+    color: #63594b;
+  }
+
+  .fudge-prod-card__desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #63594b;
+    margin: 0 0 10px 0;
+  }
+
+  .fudge-prod-card__spec {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11.5px;
+    color: #63594b;
+    margin: 0 0 18px 0;
+    font-style: italic;
+  }
+
+  .fudge-prod-card__spec span {
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  .fudge-prod-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid #f0eee8;
+  }
+
+  .fudge-prod-card__price {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #191005;
+  }
+
+  .fudge-prod-card__compare-price {
+    font-size: 12.5px;
+    font-weight: 400;
+    color: #8A8780;
+    text-decoration: line-through;
+    margin-left: 4px;
+  }
+
+  .fudge-card-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #191005;
+    color: #fefbf6;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 9px 18px;
+    border-radius: 999px;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+  }
+
+  .fudge-card-btn:hover {
+    background-color: #383127;
+    transform: translateY(-1px);
+  }
+
+  .fudge-card-btn--disabled {
+    background-color: #e5e5e5;
+    color: #888888;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "The Everyday Edit Grid",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#fefbf6"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "THE EVERYDAY EDIT"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "A better view of pet care."
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Featured Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4,
+      "label": "Products to Show"
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "View All Link Label",
+      "default": "Care guide"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View All Link Destination"
+    }
+  ],
+  "presets": [
+    {
+      "name": "The Everyday Edit Grid"
+    }
+  ]
+}
+{% endschema %}

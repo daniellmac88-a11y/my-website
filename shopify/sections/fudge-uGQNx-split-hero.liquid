@@ -1,0 +1,303 @@
+{% comment %}
+  PetJoy Atmospheric Hero Banner & Checkout Strip
+  Full-bleed lifestyle background with editorial typography and reassurance microcopy
+{% endcomment %}
+
+<div class="petjoy-hero" id="petjoy-hero-{{ section.id }}">
+  <div class="petjoy-hero__backdrop">
+    {%- if section.settings.video_url != blank -%}
+      <video 
+        class="petjoy-hero__bg-video" 
+        autoplay 
+        loop 
+        muted 
+        playsinline 
+        webkit-playsinline 
+        preload="metadata"
+        aria-label="A happy dog running through a sunlit meadow"
+        poster="{{ section.settings.image_url | default: 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-petphobia-golden-dog-hero.png?v=1790537214' }}"
+      >
+        <source src="{{ section.settings.video_url }}" type="video/mp4">
+      </video>
+    {%- else -%}
+      {%- assign hero_img_url = section.settings.image_url | default: 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-petphobia-golden-dog-hero.png?v=1790537214' -%}
+      <img 
+        src="{{ hero_img_url }}" 
+        alt="{{ section.settings.heading | escape }}" 
+        class="petjoy-hero__bg-img"
+        loading="eager"
+        fetchpriority="high"
+      />
+    {%- endif -%}
+
+    <div class="petjoy-hero__overlay"></div>
+  </div>
+
+  <div class="petjoy-hero__inner page-width">
+    <div class="petjoy-hero__content">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="petjoy-hero__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      <h1 class="petjoy-hero__heading">
+        {{ section.settings.heading | newline_to_br }}
+      </h1>
+
+      {%- if section.settings.subheading != blank -%}
+        <p class="petjoy-hero__subheading">
+          {{ section.settings.subheading }}
+        </p>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank -%}
+        <div class="petjoy-hero__cta-wrap">
+          <a href="{{ section.settings.button_link | default: '#shop-products' }}" class="petjoy-hero__btn">
+            {{ section.settings.button_label }}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{%- if section.settings.strip_text != blank -%}
+  <div class="petjoy-info-strip">
+    <p class="petjoy-info-strip__text">{{ section.settings.strip_text }}</p>
+  </div>
+{%- endif -%}
+
+<style>
+  .petjoy-hero {
+    position: relative;
+    width: 100%;
+    min-height: 520px;
+    height: 72vh;
+    max-height: 640px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background-color: #f4eee0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .petjoy-hero {
+      min-height: 480px;
+      height: 65vh;
+    }
+  }
+
+  .petjoy-hero__backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .petjoy-hero__bg-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    opacity: 0.88;
+  }
+
+  .petjoy-hero__bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 78% center;
+    display: block;
+  }
+
+  @media screen and (max-width: 749px) {
+    .petjoy-hero__bg-img {
+      object-position: 70% center;
+    }
+  }
+
+  .petjoy-hero__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(25, 16, 5, 0.52) 0%, rgba(25, 16, 5, 0.32) 48%, rgba(25, 16, 5, 0.08) 100%);
+    pointer-events: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .petjoy-hero__overlay {
+      background: linear-gradient(to bottom, rgba(25, 16, 5, 0.45) 0%, rgba(25, 16, 5, 0.35) 60%, rgba(25, 16, 5, 0.15) 100%);
+    }
+  }
+
+  .petjoy-hero__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    box-sizing: border-box;
+  }
+
+  @media screen and (min-width: 750px) {
+    .petjoy-hero__inner {
+      padding: 60px 48px;
+    }
+  }
+
+  .petjoy-hero__content {
+    max-width: 520px;
+    text-align: left;
+  }
+
+  .petjoy-hero__eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #fefbf6;
+    margin: 0 0 12px 0;
+    letter-spacing: 0.02em;
+  }
+
+  .petjoy-hero__heading {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 38px;
+    line-height: 1.12;
+    font-weight: 400;
+    color: #fefbf6;
+    margin: 0 0 18px 0;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  @media screen and (min-width: 750px) {
+    .petjoy-hero__heading {
+      font-size: 52px;
+    }
+  }
+
+  .petjoy-hero__subheading {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    color: #f4eee0;
+    margin: 0 0 28px 0;
+    max-width: 480px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .petjoy-hero__cta-wrap {
+    display: flex;
+    align-items: center;
+  }
+
+  .petjoy-hero__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: #fefbf6;
+    color: #191005;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 12px 26px;
+    border-radius: 4px;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .petjoy-hero__btn:hover {
+    background-color: #ffffff;
+    color: #000000;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .petjoy-info-strip {
+    background-color: #ffffff;
+    border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 12px 20px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .petjoy-info-strip__text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: #63594b;
+    margin: 0;
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+    font-weight: 500;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Atmospheric Hero Banner",
+  "settings": [
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "Hero Video MP4 URL",
+      "default": "https://cdn.shopify.com/videos/c/vp/2ed8080deab54888807055f6e16dc3f9/2ed8080deab54888807055f6e16dc3f9.HD-720p-4.5Mbps-95713811.mp4"
+    },
+    {
+      "type": "text",
+      "id": "image_url",
+      "label": "Hero Image URL",
+      "default": "https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-petphobia-golden-dog-hero.png?v=1790537214"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "Pet happiness, simplified."
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Practical essentials\nfor happier pets."
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Shop grooming, indoor play, cozy rest, and cleaner everyday care for cats and dogs."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Explore petjoy →"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "text",
+      "id": "strip_text",
+      "label": "Info Strip Text",
+      "default": "Product availability, delivery, and return details are confirmed at checkout."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atmospheric Hero Banner"
+    }
+  ]
+}
+{% endschema %}

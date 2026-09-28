@@ -1,0 +1,1006 @@
+{% comment %}
+  PetJoy Nordic Studio Minimal Cart Section
+  Complete Package: Free shipping progress bar, 1-click upsells, trust guarantees, and minimalist styling.
+{% endcomment %}
+
+{%- liquid
+  assign threshold_dollars = section.settings.shipping_threshold | default: 50
+  assign threshold_cents = threshold_dollars | times: 100
+  assign cart_total = cart.total_price
+  assign remaining_cents = threshold_cents | minus: cart_total
+
+  if remaining_cents <= 0
+    assign unlocked = true
+    assign progress_pct = 100
+  else
+    assign unlocked = false
+    assign progress_pct = cart_total | times: 100.0 | divided_by: threshold_cents
+  endif
+
+  assign upsell_product = all_products[section.settings.upsell_product_handle]
+  if upsell_product == blank
+    assign upsell_product = all_products['dog-paw-cleaner']
+  endif
+  if upsell_product == blank
+    assign upsell_product = all_products['4-in-1-electric-pet-grooming-kit-hair-trimmer-clippers-nail-grinder-for-cats-dogs']
+  endif
+
+  assign upsell_in_cart = false
+  for item in cart.items
+    if item.product.id == upsell_product.id
+      assign upsell_in_cart = true
+      break
+    endif
+  endfor
+-%}
+
+<div class="nordic-cart-page" id="NordicCartPage-{{ section.id }}" data-section-id="{{ section.id }}">
+  <div class="nordic-cart-container">
+
+    <!-- 1. FREE SHIPPING PROGRESS BAR -->
+    <div class="nordic-shipping-banner">
+      <div class="nordic-shipping-msg">
+        {%- if unlocked -%}
+          <span class="nordic-shipping-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F5C05C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </span>
+          <strong>Congratulations! You've unlocked Free Tracked Delivery!</strong>
+        {%- else -%}
+          <span class="nordic-shipping-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F242D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13"></rect>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+          </span>
+          <span>Add <strong>{{ remaining_cents | money }}</strong> more to unlock <strong>Free Tracked Delivery</strong>!</span>
+        {%- endif -%}
+      </div>
+      <div class="nordic-progress-track">
+        <div class="nordic-progress-fill" style="width: {{ progress_pct }}%;"></div>
+      </div>
+    </div>
+
+    {%- if cart == empty -%}
+      <!-- 2. EMPTY CART VIEW -->
+      <div class="nordic-empty-cart">
+        <div class="nordic-empty-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#6E737D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+        </div>
+        <h1 class="nordic-empty-title">Your cart is currently empty</h1>
+        <p class="nordic-empty-sub">Treat your pet to gentle daily grooming and cozy comfort essentials.</p>
+        <a href="/collections/all" class="nordic-btn-primary">Explore Pet Essentials</a>
+
+        <!-- Empty Cart Bestsellers Grid -->
+        <div class="nordic-empty-recs">
+          <h2 class="nordic-empty-recs-title">Popular Pet Favorites</h2>
+          <div class="nordic-empty-grid">
+            {%- for rec_product in collections['all'].products limit: 4 -%}
+              <a href="{{ rec_product.url }}" class="nordic-empty-card">
+                <div class="nordic-empty-card-img">
+                  {%- if rec_product.featured_image != blank -%}
+                    <img 
+                      src="{{ rec_product.featured_image | image_url: width: 400, height: 400, crop: 'center' }}" 
+                      alt="{{ rec_product.title | escape }}"
+                      loading="lazy"
+                      width="200"
+                      height="200"
+                    >
+                  {%- else -%}
+                  {%- liquid
+                    assign fallback_img = 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/homepage2.jpg?v=1790303791'
+                    if forloop.index == 1
+                      assign fallback_img = 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-plush-shark-pet-bed.png?v=1790540584'
+                    elsif forloop.index == 2
+                      assign fallback_img = 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/homepage1.jpg?v=1790303791'
+                    elsif forloop.index == 3
+                      assign fallback_img = 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-cat-litter-trapping-mat.png?v=1790540584'
+                    elsif forloop.index == 4
+                      assign fallback_img = 'https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-dog-paw-cleaner.png?v=1790540584'
+                    endif
+                  -%}
+                  <img 
+                    src="{{ fallback_img }}" 
+                    alt="{{ rec_product.title | escape }}"
+                    loading="lazy"
+                    width="200"
+                    height="200"
+                  >
+                  {%- endif -%}
+                </div>
+                <div class="nordic-empty-card-info">
+                  <span class="nordic-empty-card-name">{{ rec_product.title }}</span>
+                  <span class="nordic-empty-card-price">{{ rec_product.price | money }}</span>
+                </div>
+              </a>
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+
+    {%- else -%}
+
+      <!-- 3. ACTIVE CART WITH ITEMS (2-COLUMN SPLIT) -->
+      <div class="nordic-cart-grid">
+        
+        <!-- LEFT: ITEMS LIST + UPSELL -->
+        <div class="nordic-cart-left">
+          <div class="nordic-cart-header">
+            <h1 class="nordic-cart-title">Shopping Cart</h1>
+            <span class="nordic-item-count">({{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %})</span>
+          </div>
+
+          <form action="{{ routes.cart_url }}" method="post" id="nordic-cart-form">
+            <div class="nordic-items-list">
+              {%- for item in cart.items -%}
+                <div class="nordic-cart-item" data-line="{{ forloop.index }}">
+                  <!-- Image -->
+                  <div class="nordic-item-img-wrap">
+                    {%- if item.image != blank -%}
+                      <img 
+                        src="{{ item.image | image_url: width: 240, height: 240, crop: 'center' }}" 
+                        alt="{{ item.title | escape }}" 
+                        loading="lazy"
+                        width="100"
+                        height="100"
+                      >
+                    {%- else -%}
+                      <img 
+                        src="https://static.fudge.cloud/generated_images/AqzjBiw1qIHvBc3qYL7x-.png" 
+                        alt="{{ item.title | escape }}" 
+                        loading="lazy"
+                        width="100"
+                        height="100"
+                      >
+                    {%- endif -%}
+                  </div>
+
+                  <!-- Details -->
+                  <div class="nordic-item-details">
+                    <a href="{{ item.url }}" class="nordic-item-title">{{ item.product.title }}</a>
+                    {%- unless item.product.has_only_default_variant -%}
+                      <div class="nordic-item-variants">
+                        {%- for option in item.options_with_values -%}
+                          <span class="nordic-item-opt">{{ option.name }}: {{ option.value }}</span>
+                        {%- endfor -%}
+                      </div>
+                    {%- endunless -%}
+                    <span class="nordic-item-price">{{ item.final_price | money }}</span>
+                  </div>
+
+                  <!-- Quantity Controls -->
+                  <div class="nordic-item-qty-wrap">
+                    <div class="nordic-qty-pill">
+                      <button type="button" class="nordic-qty-btn minus" data-line="{{ forloop.index }}" data-qty="{{ item.quantity | minus: 1 }}" aria-label="Decrease quantity">−</button>
+                      <span class="nordic-qty-num">{{ item.quantity }}</span>
+                      <button type="button" class="nordic-qty-btn plus" data-line="{{ forloop.index }}" data-qty="{{ item.quantity | plus: 1 }}" aria-label="Increase quantity">+</button>
+                    </div>
+                  </div>
+
+                  <!-- Line Total & Remove -->
+                  <div class="nordic-item-total-col">
+                    <span class="nordic-item-line-total">{{ item.final_line_price | money }}</span>
+                    <button type="button" class="nordic-remove-btn" data-line="{{ forloop.index }}" title="Remove item" aria-label="Remove item">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+          </form>
+
+          <!-- 1-CLICK IN-CART UPSELL -->
+          {%- if upsell_product != blank and upsell_in_cart == false -%}
+            <div class="nordic-upsell-box">
+              <span class="nordic-upsell-tag">Frequently Paired With Pets</span>
+              <div class="nordic-upsell-content">
+                <div class="nordic-upsell-media">
+                  {%- if upsell_product.featured_image != blank -%}
+                    <img 
+                      src="{{ upsell_product.featured_image | image_url: width: 160, height: 160, crop: 'center' }}" 
+                      alt="{{ upsell_product.title | escape }}"
+                      loading="lazy"
+                      width="70"
+                      height="70"
+                    >
+                  {%- else -%}
+                    <img 
+                      src="https://cdn.shopify.com/s/files/1/0808/0539/6702/files/fudge-dog-paw-cleaner.png?v=1790540584" 
+                      alt="{{ upsell_product.title | escape }}"
+                      loading="lazy"
+                      width="70"
+                      height="70"
+                    >
+                  {%- endif -%}
+                </div>
+                <div class="nordic-upsell-info">
+                  <span class="nordic-upsell-title">{{ upsell_product.title }}</span>
+                  <span class="nordic-upsell-price">{{ upsell_product.price | money }}</span>
+                </div>
+                <button 
+                  type="button" 
+                  class="nordic-upsell-add-btn" 
+                  data-variant-id="{{ upsell_product.selected_or_first_available_variant.id }}"
+                >
+                  + Add
+                </button>
+              </div>
+            </div>
+          {%- endif -%}
+
+        </div>
+
+        <!-- RIGHT: STICKY ORDER SUMMARY & TRUST GUARANTEES -->
+        <div class="nordic-cart-right">
+          <div class="nordic-summary-card">
+            <h2 class="nordic-summary-title">Order Summary</h2>
+
+            <div class="nordic-summary-row">
+              <span>Subtotal</span>
+              <span class="nordic-summary-val">{{ cart.total_price | money }}</span>
+            </div>
+
+            <div class="nordic-summary-row">
+              <span>Estimated Shipping</span>
+              <span class="nordic-summary-val">
+                {%- if unlocked -%}
+                  <span class="nordic-free-badge">FREE</span>
+                {%- else -%}
+                  Calculated at checkout
+                {%- endif -%}
+              </span>
+            </div>
+
+            <div class="nordic-hairline-rule"></div>
+
+            <div class="nordic-summary-row total">
+              <span>Total</span>
+              <span class="nordic-summary-total-val">{{ cart.total_price | money }}</span>
+            </div>
+            <span class="nordic-tax-hint">Taxes calculated during checkout</span>
+
+            <!-- Checkout Button -->
+            <button type="submit" name="checkout" form="nordic-cart-form" class="nordic-checkout-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <span>Proceed to Checkout</span>
+            </button>
+
+            <!-- Minimalist Trust Guarantees -->
+            <div class="nordic-trust-guarantees">
+              <div class="nordic-trust-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F242D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  <polyline points="9 12 11 14 15 10"></polyline>
+                </svg>
+                <span>30-Day Happiness Guarantee</span>
+              </div>
+              <div class="nordic-trust-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F242D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <span>Safe & Secure 256-Bit SSL Checkout</span>
+              </div>
+              <div class="nordic-trust-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F242D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="1" y="3" width="15" height="13"></rect>
+                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                  <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                  <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                </svg>
+                <span>Fast Tracked Pet Care Shipping</span>
+              </div>
+            </div>
+
+            <!-- Payment Icons Row -->
+            <div class="nordic-payments-row">
+              <span class="nordic-pay-badge">Visa</span>
+              <span class="nordic-pay-badge">Mastercard</span>
+              <span class="nordic-pay-badge">Amex</span>
+              <span class="nordic-pay-badge">Apple Pay</span>
+              <span class="nordic-pay-badge">PayPal</span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    {%- endif -%}
+
+  </div>
+</div>
+
+<script>
+  (function() {
+    const section = document.getElementById('NordicCartPage-{{ section.id }}');
+    if (!section) return;
+
+    // Handle Quantity updates
+    const qtyButtons = section.querySelectorAll('.nordic-qty-btn');
+    qtyButtons.forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const line = btn.dataset.line;
+        const qty = parseInt(btn.dataset.qty, 10);
+        updateCartLine(line, qty);
+      });
+    });
+
+    // Handle Remove
+    const removeButtons = section.querySelectorAll('.nordic-remove-btn');
+    removeButtons.forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const line = btn.dataset.line;
+        updateCartLine(line, 0);
+      });
+    });
+
+    // Handle 1-Click Upsell Add
+    const upsellBtn = section.querySelector('.nordic-upsell-add-btn');
+    if (upsellBtn) {
+      upsellBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const variantId = upsellBtn.dataset.variantId;
+        upsellBtn.disabled = true;
+        upsellBtn.textContent = 'Adding...';
+
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            items: [{ id: variantId, quantity: 1 }]
+          })
+        })
+        .then(response => response.json())
+        .then(() => {
+          window.location.reload();
+        })
+        .catch(err => {
+          console.error(err);
+          upsellBtn.disabled = false;
+          upsellBtn.textContent = '+ Add';
+        });
+      });
+    }
+
+    function updateCartLine(line, quantity) {
+      fetch('/cart/change.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          line: line,
+          quantity: quantity
+        })
+      })
+      .then(response => response.json())
+      .then(() => {
+        window.location.reload();
+      })
+      .catch(err => {
+        console.error(err);
+      });
+    }
+
+  })();
+</script>
+
+{%- style -%}
+  /* NORDIC STUDIO MINIMAL CART PAGE STYLES */
+  .nordic-cart-page {
+    background-color: #FAF8F5;
+    color: #1F242D;
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    padding: 32px 0 80px;
+    min-height: 70vh;
+    box-sizing: border-box;
+  }
+
+  .nordic-cart-container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 32px;
+    box-sizing: border-box;
+  }
+
+  @media screen and (max-width: 768px) {
+    .nordic-cart-container {
+      padding: 0 16px;
+    }
+  }
+
+  /* 1. SHIPPING PROGRESS BAR */
+  .nordic-shipping-banner {
+    background-color: #FFFFFF;
+    border: 1px solid #E5E2DC;
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 36px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  }
+
+  .nordic-shipping-msg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #1F242D;
+    margin-bottom: 10px;
+  }
+
+  .nordic-shipping-icon {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .nordic-progress-track {
+    width: 100%;
+    max-width: 440px;
+    height: 6px;
+    background-color: #EFECE6;
+    border-radius: 999px;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+
+  .nordic-progress-fill {
+    height: 100%;
+    background-color: #F5C05C;
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+
+  /* 2. EMPTY CART VIEW */
+  .nordic-empty-cart {
+    text-align: center;
+    padding: 48px 20px 64px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .nordic-empty-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  .nordic-empty-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: #1F242D;
+    margin: 0 0 10px;
+  }
+
+  .nordic-empty-sub {
+    font-size: 15px;
+    color: #6E737D;
+    margin: 0 0 24px;
+  }
+
+  .nordic-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    background-color: #242B35;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+  }
+
+  .nordic-btn-primary:hover {
+    background-color: #161A20;
+  }
+
+  .nordic-empty-recs {
+    margin-top: 64px;
+    border-top: 1px solid #E5E2DC;
+    padding-top: 48px;
+    text-align: left;
+  }
+
+  .nordic-empty-recs-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1F242D;
+    margin: 0 0 24px;
+    text-align: center;
+  }
+
+  .nordic-empty-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .nordic-empty-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .nordic-empty-card {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    background-color: #FFFFFF;
+    border: 1px solid #E5E2DC;
+    border-radius: 6px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .nordic-empty-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  }
+
+  .nordic-empty-card-img {
+    aspect-ratio: 1 / 1;
+    background-color: #F7F5F0;
+    overflow: hidden;
+  }
+
+  .nordic-empty-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .nordic-empty-card-info {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .nordic-empty-card-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1F242D;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .nordic-empty-card-price {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6E737D;
+  }
+
+  /* 3. ACTIVE CART (2-COLUMN) */
+  .nordic-cart-grid {
+    display: grid;
+    grid-template-columns: 64% 36%;
+    gap: 48px;
+    align-items: start;
+  }
+
+  @media screen and (max-width: 989px) {
+    .nordic-cart-grid {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+  }
+
+  /* LEFT COLUMN */
+  .nordic-cart-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #E5E2DC;
+    padding-bottom: 16px;
+  }
+
+  .nordic-cart-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: #1F242D;
+    margin: 0;
+  }
+
+  .nordic-item-count {
+    font-size: 14px;
+    color: #6E737D;
+  }
+
+  .nordic-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .nordic-cart-item {
+    display: grid;
+    grid-template-columns: 84px 1fr auto auto;
+    gap: 20px;
+    align-items: center;
+    background-color: #FFFFFF;
+    border: 1px solid #E5E2DC;
+    border-radius: 6px;
+    padding: 16px;
+  }
+
+  @media screen and (max-width: 600px) {
+    .nordic-cart-item {
+      grid-template-columns: 70px 1fr;
+      gap: 14px;
+    }
+  }
+
+  .nordic-item-img-wrap {
+    width: 84px;
+    height: 84px;
+    border-radius: 4px;
+    background-color: #F5F3EE;
+    overflow: hidden;
+  }
+
+  @media screen and (max-width: 600px) {
+    .nordic-item-img-wrap {
+      width: 70px;
+      height: 70px;
+    }
+  }
+
+  .nordic-item-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .nordic-item-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .nordic-item-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: #1F242D;
+    text-decoration: none;
+    line-height: 1.35;
+  }
+
+  .nordic-item-title:hover {
+    color: #F5C05C;
+  }
+
+  .nordic-item-variants {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .nordic-item-opt {
+    font-size: 12px;
+    color: #6E737D;
+  }
+
+  .nordic-item-price {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1F242D;
+  }
+
+  .nordic-qty-pill {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #D5D2CB;
+    border-radius: 4px;
+    background-color: #FAF8F5;
+  }
+
+  .nordic-qty-btn {
+    border: none;
+    background: transparent;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #1F242D;
+  }
+
+  .nordic-qty-num {
+    font-size: 13px;
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+  }
+
+  .nordic-item-total-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+
+  .nordic-item-line-total {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1F242D;
+  }
+
+  .nordic-remove-btn {
+    border: none;
+    background: transparent;
+    color: #9C9EA3;
+    cursor: pointer;
+    padding: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s ease;
+  }
+
+  .nordic-remove-btn:hover {
+    color: #D32F2F;
+  }
+
+  /* UPSELL BOX */
+  .nordic-upsell-box {
+    margin-top: 32px;
+    background-color: #FFFFFF;
+    border: 1px dashed #D5D2CB;
+    border-radius: 6px;
+    padding: 16px 20px;
+  }
+
+  .nordic-upsell-tag {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6E737D;
+    margin-bottom: 12px;
+  }
+
+  .nordic-upsell-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .nordic-upsell-media {
+    width: 60px;
+    height: 60px;
+    border-radius: 4px;
+    background-color: #F5F3EE;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .nordic-upsell-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .nordic-upsell-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .nordic-upsell-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1F242D;
+  }
+
+  .nordic-upsell-price {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6E737D;
+  }
+
+  .nordic-upsell-add-btn {
+    padding: 8px 16px;
+    background-color: #FAF8F5;
+    border: 1px solid #1F242D;
+    color: #1F242D;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .nordic-upsell-add-btn:hover {
+    background-color: #1F242D;
+    color: #FFFFFF;
+  }
+
+  /* RIGHT: ORDER SUMMARY */
+  .nordic-summary-card {
+    background-color: #FFFFFF;
+    border: 1px solid #E5E2DC;
+    border-radius: 6px;
+    padding: 24px;
+    position: sticky;
+    top: 32px;
+  }
+
+  .nordic-summary-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1F242D;
+    margin: 0 0 20px;
+    border-bottom: 1px solid #E5E2DC;
+    padding-bottom: 12px;
+  }
+
+  .nordic-summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #555A64;
+    margin-bottom: 12px;
+  }
+
+  .nordic-summary-val {
+    font-weight: 500;
+    color: #1F242D;
+  }
+
+  .nordic-free-badge {
+    color: #2E7D32;
+    font-weight: 700;
+  }
+
+  .nordic-hairline-rule {
+    height: 1px;
+    background-color: #E5E2DC;
+    margin: 16px 0;
+  }
+
+  .nordic-summary-row.total {
+    font-size: 17px;
+    font-weight: 600;
+    color: #1F242D;
+    margin-bottom: 4px;
+  }
+
+  .nordic-summary-total-val {
+    font-family: 'Poppins', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #1F242D;
+  }
+
+  .nordic-tax-hint {
+    display: block;
+    font-size: 12px;
+    color: #8C9098;
+    margin-bottom: 20px;
+  }
+
+  .nordic-checkout-btn {
+    width: 100%;
+    min-height: 52px;
+    background-color: #242B35;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    box-shadow: 0 2px 6px rgba(36, 43, 53, 0.12);
+    margin-bottom: 24px;
+  }
+
+  .nordic-checkout-btn:hover {
+    background-color: #161A20;
+  }
+
+  /* TRUST GUARANTEES */
+  .nordic-trust-guarantees {
+    border-top: 1px solid #E5E2DC;
+    padding-top: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .nordic-trust-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: #555A64;
+  }
+
+  /* PAYMENT BADGES */
+  .nordic-payments-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    border-top: 1px solid #E5E2DC;
+    padding-top: 14px;
+  }
+
+  .nordic-pay-badge {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #6E737D;
+    background-color: #FAF8F5;
+    border: 1px solid #E5E2DC;
+    border-radius: 3px;
+    padding: 3px 6px;
+  }
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "Nordic Minimal Cart",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "number",
+      "id": "shipping_threshold",
+      "label": "Free Shipping Threshold ($)",
+      "default": 50
+    },
+    {
+      "type": "product",
+      "id": "upsell_product_handle",
+      "label": "In-Cart Upsell Product"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Nordic Minimal Cart"
+    }
+  ]
+}
+{% endschema %}

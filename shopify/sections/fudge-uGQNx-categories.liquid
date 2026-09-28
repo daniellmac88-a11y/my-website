@@ -1,0 +1,191 @@
+{% comment %}
+  PetJoy Categories by Routine
+  Matches store-improvement.replosites.com exactly
+{% endcomment %}
+
+<section class="fudge-routine-cats">
+  <div class="fudge-routine-cats__container">
+    <div class="fudge-routine-cats__header">
+      <p class="fudge-routine-cats__eyebrow">A QUICK WAY TO CHOOSE</p>
+      <h2 class="fudge-routine-cats__title">Start with the routine, not the product.</h2>
+      <p class="fudge-routine-cats__subtitle">Pick the moment you want to improve, then choose the essential made for it.</p>
+    </div>
+
+    <div class="fudge-routine-cats__grid">
+      <!-- Routine 1: Play -->
+      <a href="#shop-products" class="fudge-routine-card">
+        <div class="fudge-routine-card__content">
+          <h3 class="fudge-routine-card__name">Play</h3>
+          <p class="fudge-routine-card__desc">For indoor cats that need more movement and stimulation.</p>
+        </div>
+        <div class="fudge-routine-card__footer">
+          <span class="fudge-routine-card__action">Browse play essentials &rarr;</span>
+        </div>
+      </a>
+
+      <!-- Routine 2: Care -->
+      <a href="#shop-products" class="fudge-routine-card">
+        <div class="fudge-routine-card__content">
+          <h3 class="fudge-routine-card__name">Care</h3>
+          <p class="fudge-routine-card__desc">For cleaner grooming and hydration routines at home.</p>
+        </div>
+        <div class="fudge-routine-card__footer">
+          <span class="fudge-routine-card__action">Browse care essentials &rarr;</span>
+        </div>
+      </a>
+
+      <!-- Routine 3: Comfort -->
+      <a href="#shop-products" class="fudge-routine-card">
+        <div class="fudge-routine-card__content">
+          <h3 class="fudge-routine-card__name">Comfort</h3>
+          <p class="fudge-routine-card__desc">For a more comfortable place to climb, rest, and recharge.</p>
+        </div>
+        <div class="fudge-routine-card__footer">
+          <span class="fudge-routine-card__action">Browse comfort essentials &rarr;</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .fudge-routine-cats {
+    background-color: #fefbf6;
+    padding: 64px 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media screen and (min-width: 768px) {
+    .fudge-routine-cats {
+      padding: 96px 40px;
+    }
+  }
+
+  .fudge-routine-cats__container {
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  .fudge-routine-cats__header {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 48px auto;
+  }
+
+  .fudge-routine-cats__eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #63594b;
+    margin: 0 0 10px 0;
+  }
+
+  .fudge-routine-cats__title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: #191005;
+    margin: 0 0 12px 0;
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+  }
+
+  @media screen and (min-width: 768px) {
+    .fudge-routine-cats__title {
+      font-size: 44px;
+    }
+  }
+
+  .fudge-routine-cats__subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: #63594b;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .fudge-routine-cats__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    background-color: #e5e5e5;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  @media screen and (min-width: 768px) {
+    .fudge-routine-cats__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+    }
+  }
+
+  .fudge-routine-card {
+    background-color: #ffffff;
+    padding: 36px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-decoration: none;
+    color: inherit;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .fudge-routine-card:hover {
+    background-color: #faf8f3;
+  }
+
+  .fudge-routine-card__name {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: #191005;
+    margin: 0 0 10px 0;
+    letter-spacing: -0.01em;
+  }
+
+  .fudge-routine-card__desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+    color: #63594b;
+    margin: 0 0 28px 0;
+  }
+
+  .fudge-routine-card__footer {
+    margin-top: auto;
+  }
+
+  .fudge-routine-card__action {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #191005;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: gap 0.2s ease, color 0.2s ease;
+  }
+
+  .fudge-routine-card:hover .fudge-routine-card__action {
+    gap: 10px;
+    color: #000000;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Categories by Routine",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Categories by Routine"
+    }
+  ]
+}
+{% endschema %}

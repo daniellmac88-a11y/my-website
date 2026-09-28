@@ -1,0 +1,609 @@
+{% comment %}
+  PetJoy Two-Category Catalog Section
+  Categorizes all products into two primary categories:
+  1st Heading: DOGS
+  2nd Heading: CATS
+{% endcomment %}
+
+{%- liquid
+  assign is_all_catalog = false
+  if collection.handle == 'all' or collection.handle == blank
+    assign is_all_catalog = true
+  endif
+
+  assign dog_col = collections['dogs']
+  assign cat_col = collections['cats']
+-%}
+
+<div class="petjoy-catalog-page">
+  <!-- Catalog Hero Header -->
+  <header class="petjoy-catalog-header">
+    <div class="petjoy-catalog-header__container">
+      <p class="petjoy-catalog-header__eyebrow">
+        {%- if is_all_catalog -%}
+          PETJOY CATALOG
+        {%- else -%}
+          COLLECTION
+        {%- endif -%}
+      </p>
+
+      <h1 class="petjoy-catalog-header__title">
+        {%- if is_all_catalog -%}
+          Curated Essentials
+        {%- else -%}
+          {{ collection.title }}
+        {%- endif -%}
+      </h1>
+
+      <p class="petjoy-catalog-header__subtitle">
+        {%- if is_all_catalog -%}
+          Shop practical, thoughtfully selected care and play essentials for cats and dogs.
+        {%- else -%}
+          {{ collection.description | strip_html | default: 'Thoughtfully selected pieces for real pet routines.' }}
+        {%- endif -%}
+      </p>
+
+      {%- if is_all_catalog -%}
+        <div class="petjoy-catalog-nav-pills">
+          <a href="#dogs" class="petjoy-pill-btn">
+            <span>Dogs</span>
+            <span class="petjoy-pill-count">{{ dog_col.products_count | default: 5 }}</span>
+          </a>
+          <a href="#cats" class="petjoy-pill-btn">
+            <span>Cats</span>
+            <span class="petjoy-pill-count">{{ cat_col.products_count | default: 4 }}</span>
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </header>
+
+  {%- if is_all_catalog -%}
+    <!-- ==================== CATEGORY 1: DOGS ==================== -->
+    <section id="dogs" class="petjoy-catalog-group">
+      <div class="petjoy-catalog-group__container">
+        <div class="petjoy-catalog-group__header">
+          <div class="petjoy-catalog-group__heading-wrap">
+            <span class="petjoy-catalog-group__tag">CATEGORY 01</span>
+            <h2 class="petjoy-catalog-group__title">DOGS</h2>
+          </div>
+          <p class="petjoy-catalog-group__desc">
+            Essentials for happy walks, clean drinking stations, and cozy rest.
+          </p>
+        </div>
+
+        <div class="fudge-bestsellers__grid">
+          {%- if dog_col != blank and dog_col.products_count > 0 -%}
+            {%- for product in dog_col.products -%}
+              {%- render 'fudge-uGQNx-product-card', product: product -%}
+            {%- endfor -%}
+          {%- else -%}
+            {%- assign dog_handles = "luxury-plush-shark-pet-bed,dog-umbrella,automatic-retractable-dog-leash-dual-size-options-with-brake-lock-safety-system,dog-paw-cleaner,dog-drinking-water-bowl-with-floating-design-non-wetting-non-skid-large-capacity" | split: "," -%}
+            {%- for handle in dog_handles -%}
+              {%- assign product = all_products[handle] -%}
+              {%- if product != blank -%}
+                {%- render 'fudge-uGQNx-product-card', product: product -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+
+    <!-- Subtle Section Divider -->
+    <div class="petjoy-catalog-divider">
+      <div class="petjoy-catalog-divider__line"></div>
+    </div>
+
+    <!-- ==================== CATEGORY 2: CATS ==================== -->
+    <section id="cats" class="petjoy-catalog-group">
+      <div class="petjoy-catalog-group__container">
+        <div class="petjoy-catalog-group__header">
+          <div class="petjoy-catalog-group__heading-wrap">
+            <span class="petjoy-catalog-group__tag">CATEGORY 02</span>
+            <h2 class="petjoy-catalog-group__title">CATS</h2>
+          </div>
+          <p class="petjoy-catalog-group__desc">
+            Indoor play, climbing towers, clean hydration, and tidy litter habits.
+          </p>
+        </div>
+
+        <div class="fudge-bestsellers__grid">
+          {%- if cat_col != blank and cat_col.products_count > 0 -%}
+            {%- for product in cat_col.products -%}
+              {%- render 'fudge-uGQNx-product-card', product: product -%}
+            {%- endfor -%}
+          {%- else -%}
+            {%- assign cat_handles = "luxury-plush-shark-pet-bed,automatic-cat-toy-interactive-smart-led-laser,cat-litter-trapping-mat,cat-tree-for-large-cats-cat-tower-for-indoor" | split: "," -%}
+            {%- for handle in cat_handles -%}
+              {%- assign product = all_products[handle] -%}
+              {%- if product != blank -%}
+                {%- render 'fudge-uGQNx-product-card', product: product -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+
+  {%- else -%}
+    <!-- Single Collection View -->
+    <section class="petjoy-catalog-group">
+      <div class="petjoy-catalog-group__container">
+        <div class="fudge-bestsellers__grid">
+          {%- for product in collection.products -%}
+            {%- render 'fudge-uGQNx-product-card', product: product -%}
+          {%- else -%}
+            <p class="petjoy-catalog-empty">No products found in this category.</p>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  <!-- Checkout Policy Strip -->
+  <div class="petjoy-info-strip">
+    <p class="petjoy-info-strip__text">Product availability, delivery, and return details are confirmed at checkout.</p>
+  </div>
+</div>
+
+<style>
+  .petjoy-catalog-page {
+    background-color: #fefbf6;
+    min-height: 100vh;
+    width: 100%;
+  }
+
+  /* Catalog Hero Header */
+  .petjoy-catalog-header {
+    background-color: #f4eee0;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 60px 20px 48px 20px;
+    text-align: center;
+  }
+
+  @media screen and (min-width: 768px) {
+    .petjoy-catalog-header {
+      padding: 80px 40px 64px 40px;
+    }
+  }
+
+  .petjoy-catalog-header__container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .petjoy-catalog-header__eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #63594b;
+    margin: 0 0 10px 0;
+  }
+
+  .petjoy-catalog-header__title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 38px;
+    font-weight: 400;
+    line-height: 1.15;
+    color: #191005;
+    margin: 0 0 14px 0;
+    letter-spacing: -0.02em;
+  }
+
+  @media screen and (min-width: 768px) {
+    .petjoy-catalog-header__title {
+      font-size: 50px;
+    }
+  }
+
+  .petjoy-catalog-header__subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #63594b;
+    margin: 0 0 28px 0;
+  }
+
+  .petjoy-catalog-nav-pills {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .petjoy-pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #ffffff;
+    color: #191005;
+    border: 1px solid #e5e5e5;
+    border-radius: 999px;
+    padding: 8px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(25, 16, 5, 0.04);
+    transition: all 0.2s ease;
+  }
+
+  .petjoy-pill-btn:hover {
+    background-color: #191005;
+    color: #fefbf6;
+    border-color: #191005;
+    transform: translateY(-1px);
+  }
+
+  .petjoy-pill-count {
+    background-color: #f4eee0;
+    color: #63594b;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 999px;
+  }
+
+  .petjoy-pill-btn:hover .petjoy-pill-count {
+    background-color: rgba(254, 251, 246, 0.2);
+    color: #fefbf6;
+  }
+
+  /* Catalog Groups */
+  .petjoy-catalog-group {
+    padding: 60px 20px;
+    scroll-margin-top: 40px;
+  }
+
+  @media screen and (min-width: 768px) {
+    .petjoy-catalog-group {
+      padding: 80px 40px;
+    }
+  }
+
+  .petjoy-catalog-group__container {
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  .petjoy-catalog-group__header {
+    margin-bottom: 36px;
+    border-bottom: 2px solid #191005;
+    padding-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  @media screen and (min-width: 768px) {
+    .petjoy-catalog-group__header {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 44px;
+    }
+  }
+
+  .petjoy-catalog-group__heading-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .petjoy-catalog-group__tag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #63594b;
+  }
+
+  .petjoy-catalog-group__title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 34px;
+    font-weight: 400;
+    line-height: 1.1;
+    color: #191005;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  @media screen and (min-width: 768px) {
+    .petjoy-catalog-group__title {
+      font-size: 42px;
+    }
+  }
+
+  .petjoy-catalog-group__desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14.5px;
+    color: #63594b;
+    margin: 0;
+    max-width: 440px;
+  }
+
+  /* Catalog Divider */
+  .petjoy-catalog-divider {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  @media screen and (min-width: 768px) {
+    .petjoy-catalog-divider {
+      padding: 0 40px;
+    }
+  }
+
+  .petjoy-catalog-divider__line {
+    border-top: 1px dashed #e5e5e5;
+  }
+
+  .petjoy-catalog-empty {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: #63594b;
+    padding: 40px 0;
+    text-align: center;
+  }
+
+  /* Product Card & Grid Styles */
+  .fudge-bestsellers__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  @media screen and (min-width: 600px) {
+    .fudge-bestsellers__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+  }
+
+  @media screen and (min-width: 900px) {
+    .fudge-bestsellers__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+  }
+
+  @media screen and (min-width: 1150px) {
+    .fudge-bestsellers__grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+  }
+
+  .fudge-prod-card {
+    background-color: #ffffff;
+    border-radius: 4px;
+    border: 1px solid #e5e5e5;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+    height: 100%;
+  }
+
+  .fudge-prod-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(25, 16, 5, 0.06);
+  }
+
+  .fudge-prod-card__image-container {
+    position: relative;
+    width: 100%;
+    background-color: #f7f5ef;
+    overflow: hidden;
+  }
+
+  .fudge-prod-card__pill-tag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 2;
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid #e5e5e5;
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #191005;
+    backdrop-filter: blur(4px);
+  }
+
+  .fudge-prod-card__image-link {
+    display: block;
+    text-decoration: none;
+  }
+
+  .fudge-prod-card__image-box {
+    position: relative;
+    width: 100%;
+    padding-bottom: 90%;
+    overflow: hidden;
+  }
+
+  .fudge-prod-card__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 16px;
+    box-sizing: border-box;
+    transition: transform 0.5s ease;
+  }
+
+  .fudge-prod-card:hover .fudge-prod-card__image {
+    transform: scale(1.06);
+  }
+
+  .fudge-prod-card__placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f7f5ef;
+  }
+
+  .fudge-prod-card__body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background-color: #ffffff;
+  }
+
+  .fudge-prod-card__pretag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #63594b;
+    margin-bottom: 6px;
+  }
+
+  .fudge-prod-card__title-link {
+    text-decoration: none;
+    color: inherit;
+    margin-bottom: 8px;
+  }
+
+  .fudge-prod-card__title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.25;
+    color: #191005;
+    margin: 0;
+    transition: color 0.15s ease;
+  }
+
+  .fudge-prod-card__title:hover {
+    color: #63594b;
+  }
+
+  .fudge-prod-card__desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #63594b;
+    margin: 0 0 10px 0;
+  }
+
+  .fudge-prod-card__spec {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11.5px;
+    color: #63594b;
+    margin: 0 0 18px 0;
+    font-style: italic;
+  }
+
+  .fudge-prod-card__spec span {
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  .fudge-prod-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid #f0eee8;
+  }
+
+  .fudge-prod-card__price {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #191005;
+  }
+
+  .fudge-prod-card__compare-price {
+    font-size: 12.5px;
+    font-weight: 400;
+    color: #8A8780;
+    text-decoration: line-through;
+    margin-left: 4px;
+  }
+
+  .fudge-card-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #191005;
+    color: #fefbf6;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 9px 18px;
+    border-radius: 999px;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+  }
+
+  .fudge-card-btn:hover {
+    background-color: #383127;
+    transform: translateY(-1px);
+  }
+
+  .fudge-card-btn--disabled {
+    background-color: #e5e5e5;
+    color: #888888;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  .petjoy-info-strip {
+    background-color: #ffffff;
+    border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 12px 20px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 40px;
+  }
+
+  .petjoy-info-strip__text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: #63594b;
+    margin: 0;
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+    font-weight: 500;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Two-Category Catalog",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Two-Category Catalog"
+    }
+  ]
+}
+{% endschema %}

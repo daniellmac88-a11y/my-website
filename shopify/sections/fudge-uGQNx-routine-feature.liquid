@@ -1,0 +1,182 @@
+{% comment %}
+  PetJoy Routine Feature Section
+  "The old way, rethought" - 2-column split with lifestyle product card & editorial guidance
+{% endcomment %}
+
+<section id="care" class="fudge-routine-feature">
+  <div class="fudge-routine-feature__container">
+    <div class="fudge-routine-feature__grid">
+      <!-- Media Column -->
+      <div class="fudge-routine-feature__media-col">
+        <div class="fudge-routine-feature__card">
+          <img 
+            src="https://cdn.shopify.com/s/files/1/0808/0539/6702/files/e9549f0ce8998499409df64ceb8ae6e5.jpg?v=1790303807" 
+            alt="No-Spill Floating Water Bowl" 
+            class="fudge-routine-feature__img"
+            loading="lazy"
+          />
+        </div>
+      </div>
+
+      <!-- Text Column -->
+      <div class="fudge-routine-feature__text-col">
+        <p class="fudge-routine-feature__eyebrow">THE OLD WAY, RETHOUGHT</p>
+        <h2 class="fudge-routine-feature__title">Make the everyday easier.</h2>
+        <p class="fudge-routine-feature__desc">
+          From a tidier drink station to more independent indoor play, the right essential can help routines feel calmer for both of you.
+        </p>
+
+        <ul class="fudge-routine-feature__list">
+          <li class="fudge-routine-feature__item">
+            <span class="fudge-routine-feature__bullet"></span>
+            <span>Choose solutions by pet, size, and use case.</span>
+          </li>
+          <li class="fudge-routine-feature__item">
+            <span class="fudge-routine-feature__bullet"></span>
+            <span>Review care instructions before use.</span>
+          </li>
+          <li class="fudge-routine-feature__item">
+            <span class="fudge-routine-feature__bullet"></span>
+            <span>Find useful gifts for the pets in your life.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .fudge-routine-feature {
+    background-color: #f4eee0;
+    padding: 64px 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media screen and (min-width: 768px) {
+    .fudge-routine-feature {
+      padding: 96px 40px;
+    }
+  }
+
+  .fudge-routine-feature__container {
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  .fudge-routine-feature__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 900px) {
+    .fudge-routine-feature__grid {
+      grid-template-columns: 1.1fr 1fr;
+      gap: 64px;
+    }
+  }
+
+  .fudge-routine-feature__card {
+    background-color: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #e5e5e5;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(25, 16, 5, 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+
+  .fudge-routine-feature__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .fudge-routine-feature__card:hover .fudge-routine-feature__img {
+    transform: scale(1.03);
+  }
+
+  .fudge-routine-feature__eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #63594b;
+    margin: 0 0 12px 0;
+  }
+
+  .fudge-routine-feature__title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 34px;
+    font-weight: 400;
+    line-height: 1.15;
+    color: #191005;
+    margin: 0 0 18px 0;
+    letter-spacing: -0.02em;
+  }
+
+  @media screen and (min-width: 768px) {
+    .fudge-routine-feature__title {
+      font-size: 46px;
+    }
+  }
+
+  .fudge-routine-feature__desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #63594b;
+    margin: 0 0 32px 0;
+    max-width: 520px;
+  }
+
+  .fudge-routine-feature__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .fudge-routine-feature__item {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: #191005;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(25, 16, 5, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .fudge-routine-feature__item:first-child {
+    border-top: 1px solid rgba(25, 16, 5, 0.08);
+  }
+
+  .fudge-routine-feature__bullet {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #191005;
+    flex-shrink: 0;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Routine Feature",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Routine Feature"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,278 @@
+{% comment %}
+  PetJoy Customer Testimonials Section
+{% endcomment %}
+
+<div class="fudge-reviews" style="background-color: {{ section.settings.bg_color }};">
+  <div class="fudge-reviews__container">
+    <div class="fudge-reviews__header">
+      <h2 class="fudge-reviews__title">
+        {{ section.settings.title }}
+      </h2>
+      {%- if section.settings.subtitle != blank -%}
+        <p class="fudge-reviews__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="fudge-reviews__grid">
+      {%- for block in section.blocks -%}
+        <div class="fudge-review-card" {{ block.shopify_attributes }}>
+          <div class="fudge-review-card__stars">★★★★★</div>
+          <h3 class="fudge-review-card__heading">{{ block.settings.title }}</h3>
+          <p class="fudge-review-card__quote">"{{ block.settings.quote }}"</p>
+          <div class="fudge-review-card__author-strip">
+            <div class="fudge-review-card__avatar">
+              {{ block.settings.author | slice: 0 | upcase }}
+            </div>
+            <div class="fudge-review-card__author-info">
+              <span class="fudge-review-card__author-name">{{ block.settings.author }}</span>
+              {%- if block.settings.pet_info != blank -%}
+                <span class="fudge-review-card__pet-info">{{ block.settings.pet_info }}</span>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .fudge-reviews {
+    padding: 64px 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media screen and (min-width: 768px) {
+    .fudge-reviews {
+      padding: 80px 40px;
+    }
+  }
+
+  .fudge-reviews__container {
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  .fudge-reviews__header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  @media screen and (min-width: 768px) {
+    .fudge-reviews__header {
+      margin-bottom: 48px;
+    }
+  }
+
+  .fudge-reviews__title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #1E1F1D;
+    margin: 0 0 6px 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: -0.01em;
+  }
+
+  @media screen and (min-width: 768px) {
+    .fudge-reviews__title {
+      font-size: 36px;
+    }
+  }
+
+  .fudge-reviews__subtitle {
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14.5px;
+    color: #6E706A;
+    margin: 0;
+  }
+
+  .fudge-reviews__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  @media screen and (min-width: 768px) {
+    .fudge-reviews__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+  }
+
+  .fudge-review-card {
+    background-color: #FAF8F3;
+    border-radius: 8px;
+    padding: 28px 24px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .fudge-review-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+  }
+
+  .fudge-review-card__stars {
+    font-size: 18px;
+    color: #d49b38;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+
+  .fudge-review-card__heading {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1E1F1D;
+    margin: 0 0 10px 0;
+  }
+
+  .fudge-review-card__quote {
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #4A4D45;
+    margin: 0 0 20px 0;
+    flex-grow: 1;
+    font-style: italic;
+  }
+
+  .fudge-review-card__author-strip {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  .fudge-review-card__avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: #BFD5C6;
+    color: #1E1F1D;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .fudge-review-card__author-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .fudge-review-card__author-name {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #20232b;
+  }
+
+  .fudge-review-card__pet-info {
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    color: #7b7e87;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Customer Testimonials",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "What Pet Parents Say"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Real stories from happy customers."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Review Title",
+          "default": "Best grooming tool ever!"
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "My golden retriever used to hate brushing time. Now she actually sits still and purrs into the groomer. Game changer!"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Customer Name",
+          "default": "Sarah L."
+        },
+        {
+          "type": "text",
+          "id": "pet_info",
+          "label": "Pet Type / Location",
+          "default": "Verified Buyer - Golden Retriever Mom"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Customer Testimonials",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "title": "Perfect for My Pup!",
+            "quote": "I couldn't be happier with my purchase! The water bowl and grooming kit are extremely high quality and work flawlessly.",
+            "author": "Sarah L.",
+            "pet_info": "Verified Buyer - Dog Parent"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "title": "My Cat Is Obsessed!",
+            "quote": "The automatic smart laser cat toy keeps my indoor tabby entertained for hours. Excellent build and fast shipping!",
+            "author": "Daniel M.",
+            "pet_info": "Verified Buyer - Cat Owner"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "title": "Exceptional Quality & Support",
+            "quote": "From comfortable beds to durable everyday essentials, everything I've bought from PetJoy has been an absolute hit.",
+            "author": "Emily R.",
+            "pet_info": "Verified Buyer - Multi-pet Home"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
